@@ -2,20 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02cf26e7-6c1d-49f0-8ac0-2305596b38de" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/membership.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/other.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/testrunner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/membership/settings.py" afterPath="$PROJECT_DIR$/membership/settings.py" />
     </list>
     <ignored path="membership.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="02cf26e7-6c1d-49f0-8ac0-2305596b38de" time="1366116887073" ignored="false" />
     <file path="/urls.py" changelist="02cf26e7-6c1d-49f0-8ac0-2305596b38de" time="1366117882650" ignored="false" />
-    <file path="/settings.py" changelist="02cf26e7-6c1d-49f0-8ac0-2305596b38de" time="1366122677452" ignored="false" />
+    <file path="/settings.py" changelist="02cf26e7-6c1d-49f0-8ac0-2305596b38de" time="1366124983427" ignored="false" />
     <file path="/tests.py" changelist="02cf26e7-6c1d-49f0-8ac0-2305596b38de" time="1366123768689" ignored="false" />
     <file path="/models.py" changelist="02cf26e7-6c1d-49f0-8ac0-2305596b38de" time="1366123445342" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -43,19 +36,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/membership/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="122" column="12" selection-start="4410" selection-end="4410" vertical-scroll-proportion="0.0">
+            <state line="142" column="0" selection-start="4847" selection-end="4847" vertical-scroll-proportion="0.25335893">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tests.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="tests.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/members/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="38" selection-start="370" selection-end="370" vertical-scroll-proportion="0.475162">
+            <state line="10" column="38" selection-start="370" selection-end="370" vertical-scroll-proportion="-3.7931035">
               <folding />
             </state>
           </provider>
@@ -99,9 +92,9 @@
       <list>
         <option value="$PROJECT_DIR$/membership/urls.py" />
         <option value="$PROJECT_DIR$/fts/tests.py" />
-        <option value="$PROJECT_DIR$/membership/settings.py" />
         <option value="$PROJECT_DIR$/members/models.py" />
         <option value="$PROJECT_DIR$/members/tests.py" />
+        <option value="$PROJECT_DIR$/membership/settings.py" />
       </list>
     </option>
   </component>
@@ -339,13 +332,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/membership/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="12" selection-start="4410" selection-end="4410" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fts/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="0" selection-start="75" selection-end="75" vertical-scroll-proportion="0.123595506">
@@ -362,7 +348,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/members/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="38" selection-start="370" selection-end="370" vertical-scroll-proportion="0.475162">
+        <state line="10" column="38" selection-start="370" selection-end="370" vertical-scroll-proportion="-3.7931035">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/membership/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="142" column="0" selection-start="4847" selection-end="4847" vertical-scroll-proportion="0.25335893">
           <folding />
         </state>
       </provider>
