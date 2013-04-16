@@ -1,3 +1,9 @@
+import os
+
+
+PROJECT_ROOT = os.path.dirname(__file__)
+
+
 # Django settings for membership project.
 
 DEBUG = True
