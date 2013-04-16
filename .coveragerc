@@ -1,0 +1,5 @@
+[run]
+omit =
+  manage.py
+  *__init__.py
+  fts/tests.py
