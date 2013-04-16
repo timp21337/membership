@@ -1,0 +1,20 @@
+[
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "timp", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": true, 
+      "is_staff": true, 
+      "last_login": "2013-04-16T14:04:37.336Z", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "pbkdf2_sha256$10000$I9FFMvqzBwQx$+jQJwh1Hreo2nmbdpREKsGj0WgMj/m86mMS214GSDHI=", 
+      "email": "timp@paneris.org", 
+      "date_joined": "2013-04-16T14:03:42.086Z"
+    }
+  }
+]
