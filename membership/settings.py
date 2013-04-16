@@ -3,11 +3,29 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
+COVERAGE_RCFILE = '.coveragerc'
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pylint',
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',
+    'django_jenkins.tasks.run_csslint'
+)
+
+CSSLINT_INTERPRETER = 'nodejs'
+CSSLINT_CHECKED_FILES = [os.path.join(PROJECT_ROOT, "membership/static/css")]
+
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
+
+APPLICATION_SHORT_NAME = 'membership'
+APPLICATION_TITLE = 'Membership (development)'
+
 
 DATABASES = {
     'default': {
@@ -24,11 +42,11 @@ DATABASES = {
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/London'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 SITE_ID = 1
 
@@ -121,6 +139,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'fts',
     'members',
+    'django_jenkins',
 )
 
 # A sample logging configuration. The only tangible logging
