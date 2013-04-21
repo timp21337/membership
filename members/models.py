@@ -23,7 +23,7 @@ class Member(models.Model):
     gender = models.CharField(max_length=1,
                               choices=(('M', 'Male'), ('F', 'Female')),
                               default= 'F')
-    role = models.CharField(max_length=1,
+    role = models.CharField(max_length=10,
                             choices=(('Member', 'Member'),
                                      ('Carer', 'Carer'),
                                      ('Helper', 'Helper'),
@@ -37,3 +37,16 @@ class Member(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.user.first_name, self.user.last_name)
+
+
+class Child(models.Model):
+    member = models.OneToOneField(Member)
+    carer = models.ForeignKey(Member, related_name='carer')
+    carer_2 = models.ForeignKey(Member, related_name='+', null=True,  on_delete=models.SET_NULL)
+    emergency_contact = models.ForeignKey(Member, related_name='+')
+    allergies = models.TextField()
+    doctors_name = models.CharField(max_length=15)
+    doctors_phone = models.CharField(max_length=16, blank=True)
+
+    class Meta:
+        verbose_name_plural = "children"
