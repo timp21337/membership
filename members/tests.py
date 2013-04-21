@@ -1,13 +1,20 @@
 from django.test import TestCase
 from members.models import Member
 from datetime import date
+from django.contrib.auth.models import User
 
 
 class MemberModelTest(TestCase):
     def test_creating_a_new_member_and_saving_it_to_the_database(self):
-        # start by creating a new member object with its "question" set
+
+        user = User.objects.create_user('bobp', 'bobp@paneris.org', 'password')
+        user.first_name = "Bob"
+        user.last_name = "Pizey"
+        user.save()
+
         member = Member()
-        member.first_name = "Bob"
+        member.user = user
+
         member.dob = date(2005, 07, 13)
 
         # check we can save it to the database
@@ -20,6 +27,7 @@ class MemberModelTest(TestCase):
         self.assertEquals(only_member_in_database, member)
 
         # and check that it's saved its two attributes: question and pub_date
-        self.assertEquals(only_member_in_database.first_name, "Bob")
+        self.assertEquals(only_member_in_database.user.first_name, "Bob")
         self.assertEquals(only_member_in_database.dob, member.dob)
 
+        user.delete()
