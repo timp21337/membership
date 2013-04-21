@@ -1,4 +1,5 @@
 from django.contrib import admin
+from members.models import Child
 from members.models import Member
 
 from django.contrib.auth.admin import UserAdmin
@@ -14,6 +15,7 @@ class UserAdmin(UserAdmin):
     inlines = (MemberInline, )
 
 
+admin.site.register(Child)
 admin.site.register(Member)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
