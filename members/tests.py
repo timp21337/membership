@@ -26,8 +26,9 @@ class MemberModelTest(TestCase):
         only_member_in_database = all_members_in_database[0]
         self.assertEquals(only_member_in_database, member)
 
-        # and check that it's saved its two attributes: question and pub_date
         self.assertEquals(only_member_in_database.user.first_name, "Bob")
         self.assertEquals(only_member_in_database.dob, member.dob)
+
+        self.assertEquals('Bob (Pizey)', member.__unicode__())
 
         user.delete()
