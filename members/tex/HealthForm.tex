@@ -1,0 +1,142 @@
+\documentclass [12pt, a4paper] {article}
+\usepackage{tabularx}
+\usepackage{varwidth}% http://ctan.org/pkg/varwidth
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, footskip=2cm]{geometry}
+\usepackage{lastpage}
+\usepackage{fullpage}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{sectsty}
+\usepackage{pdfpages}
+
+\usepackage{multirow}
+
+
+\pagestyle{fancy}
+\lfoot{\documentName}
+\cfoot{\thepage\ of \pageref{LastPage} }
+\rfoot{\documentVersion \date{\today}}
+\headheight 20pt
+\headsep 10pt
+
+\raggedbottom
+
+
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \usepackage{fontspec}
+  \ifxetex
+    \usepackage{xltxtra,xunicode}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+
+%-------------------------------------------------------------------------------
+% To enable reuse the following commands should be used in the body  
+% rather than the strings they represent
+\newcommand*{\defined}{\textbf}
+\newcommand{\documentVersion}{V 1.0 } 
+\newcommand{\projectShortProperName}{Woodcraft Registration Form}
+\newcommand{\projectShortName}{membership}
+\newcommand{\projectTitle}{Iffley Fields Elfins Registration Form}
+\newcommand{\documentTypeTitle}{Registration Form}
+\newcommand{\documentName}{\projectShortProperName }
+\newcommand{\authorName}{Tim Pizey}
+\newcommand{\authorEmail}{Tim.Pizey@psych.ox.ac.uk}
+%-------------------------------------------------------------------------------
+
+
+\begin{document}
+\sffamily
+\allsectionsfont{\sffamily}
+\rhead{\projectTitle}
+\begin{table}
+\begin{tabular}{|p{2.5cm}p{5cm}|p{2.5cm}p{5cm}|}
+\hline
+
+\textbf{Child}  & Flora Pizey & \textbf{Gender} & Female \\
+\textbf{Date of Birth} & 2004-08-22   & & \\
+
+\hline
+\textbf{Carer}  & Tim Pizey & \textbf{Mobile} &  07768894509 \\
+
+
+\textbf{Landline}   & 01865 711036 &  \textbf{Email}        & timp$@$paneris.org                  \\
+\textbf{Address}  & \multicolumn{3}{p{12cm}|}{185 Campbell Road Oxford OX4 3NT } \\
+\hline
+\textbf{Carer}  & Ruth Pizey & \textbf{Mobile} &  07768894509 \\
+
+
+\hline
+
+\textbf{Alternative contact}   & Megan Ruddock &     &  \\
+
+\textbf{Landline} & 018657777777 & \textbf{Mobile} & 07768 894509 \\
+
+\hline
+\textbf{Doctor}  & Dr Philips &\textbf{Phone} & 01865 454545\\
+
+
+
+\textbf{Address} & \multicolumn{3}{p{12cm}|}{East Oxford Medical Centre, Manzil Way, OX4 3NT}\\
+
+
+\hline
+\textbf{Allergies}  & \multicolumn{3}{p{12cm}|}{None}\\
+
+\textbf{Diet} & \multicolumn{3}{p{12cm}|}{None}\\
+
+
+\multicolumn{2}{|p{7cm}}{\textbf{Any medicine regularly taken}}&\multicolumn{2}{p{7cm}|}{None }\\
+\multicolumn{2}{|p{7cm}}{\textbf{Any conditions we should be aware of}} &\multicolumn{2}{p{7cm}|}{None }\\
+
+
+\hline
+\multicolumn{4}{|p{15cm}|}{\textbf{Privacy}}\\
+\multicolumn{4}{|p{15cm}|}{
+We take photos of group activities and use these photos on the group website and similar materials. 
+The data on this form is held on a computer but is not publicly available.}\\
+\hline
+\multicolumn{4}{|p{15cm}|}{\textbf{Declaration}}\\
+\multicolumn{4}{|p{15cm}|}{
+In case of emergency, and should leaders be unable to contact me for any reason, 
+I authorise them and medical staff to act on my behalf, 
+knowing that I will be informed as soon as possible.}\\
+\hline
+
+Signed:  & Tim Pizey &  Date:  & 2013-04-014 \\
+\hline
+\end{tabular}
+\label{tab:methodTypes}
+\end{table}
+
+\end{document}
