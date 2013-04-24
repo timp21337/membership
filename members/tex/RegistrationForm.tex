@@ -11,18 +11,21 @@
 \usepackage{fixltx2e} % provides \textsubscript
 
 \usepackage{fancyhdr}
-\usepackage{lastpage}
 \usepackage{sectsty}
 \usepackage{pdfpages}
 
 \usepackage{multirow}
 \usepackage{setspace}
+\usepackage{datetime}
 
+
+\yyyymmdddate
+\renewcommand{\dateseparator}{-}
 
 \pagestyle{fancy}
-\lfoot{\documentName}
-\cfoot{\thepage\ of \pageref{LastPage} }
-\rfoot{\documentVersion \date{\today}}
+\lfoot{\projectTitle}
+\cfoot{}
+\rfoot{\today}
 \headheight 20pt
 \headsep 10pt
 
@@ -90,8 +93,8 @@
 
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
-
 \hline
+
 \textbf{Carer}  & Tim Pizey & \textbf{Mobile} &  07768894509 \\
 
 
@@ -116,9 +119,23 @@
 
 
 \hline
-\textbf{Allergies}  & \multicolumn{3}{p{12cm}|}{None}\\
+\multicolumn{4}{p{15cm}}{ }\\
+\hline
 
-\textbf{Diet} & \multicolumn{3}{p{12cm}|}{None}\\
+
+\multicolumn{4}{|p{15cm}|}{\textbf{Allergies}}\\
+\multicolumn{4}{|p{15cm}|}{
+\begin{singlespace}
+None
+\end{singlespace}
+}\\
+
+\multicolumn{4}{|p{15cm}|}{\textbf{Dietary Requirements}}\\
+\multicolumn{4}{|p{15cm}|}{
+\begin{singlespace}
+None
+\end{singlespace}
+}\\
 
 
 \multicolumn{4}{|p{15cm}|}{\textbf{Any medicine regularly taken}}\\
@@ -127,6 +144,8 @@
 None
 \end{singlespace}
 }\\
+
+
 \multicolumn{4}{|p{15cm}|}{\textbf{Anything else we need to know}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
@@ -136,6 +155,9 @@ No
 
 
 \hline
+\multicolumn{4}{p{15cm}}{ }\\
+\hline
+
 \multicolumn{4}{|p{15cm}|}{\textbf{Privacy}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
@@ -152,7 +174,12 @@ I authorise them and medical staff to act on my behalf,
 knowing that I will be informed as soon as possible.
 \end{singlespace}
 }\\
+
+
 \hline
+\multicolumn{4}{p{15cm}}{ }\\
+\hline
+
 \begin{doublespace}
 Signed:  
 \end{doublespace}
