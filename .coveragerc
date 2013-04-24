@@ -1,5 +1,6 @@
 [run]
 omit =
   manage.py
+  members/admin.py
   *__init__.py
   fts/tests.py
