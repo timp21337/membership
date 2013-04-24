@@ -8,3 +8,7 @@ local_settings.py
 *~
 reports
 .idea
+*.aux
+*.out
+*.pdf
+*.gz
