@@ -1,6 +1,10 @@
+import subprocess
 from django.test import TestCase
 from members.models import Member
 from members.models import Child
+from members.models import dottedDict
+from members.models import create_adult
+from members.models import create_child
 from datetime import date
 from django.contrib.auth.models import User
 
@@ -44,7 +48,21 @@ class MemberModelTest(TestCase):
         self.assertEquals('Bob (Pizey)', member.__unicode__())
         self.assertEquals('Bob (Pizey)', child.__unicode__())
 
-
-
         user.delete()
 
+    def test_serialize_to_dict(self):
+        c = self.create_test_child()
+        print(dottedDict(c, 'child', {}))
+
+    def test_render_to_tex(self):
+        c = self.create_test_child()
+        file('result.tex', 'w').write(c.registrationFormLatex())
+        subprocess.call('pdflatex ./result.tex', shell=True)
+
+    def create_test_child(self):
+        tc = create_child('Tester', 'Test', 'F', '2004-08-22', create_adult('Tim', 'Test', 'timp@example.org', 'M', '15 Campbell Road, Oxford, OX4 3NT', '01865 711036','07768 894509'))
+        tc.carer_2 = create_adult("Ruth", "Test", "Ruth@Test.net", "F", "", "", "07768894509")
+        tc.emergency_contact = create_adult("Second", "Line", "second@example.org", "F", "", "", "07768 894509")
+        tc.doctor = create_adult("Dr", "Rahim", "", "M", "1 Manzil Way, Oxford OX4 3NT", "01865 77343", "")
+        tc.save()
+        return tc

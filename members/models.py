@@ -12,22 +12,28 @@ def initialise():
     admin.last_name = "Admin"
     admin.save()
 
-    florap = create_child('Flora', 'Pizey', 'F', '2004-08-22', 'Tim', 'Pizey')
+
+def create_adult(first_name, last_name, email, gender, address, landline, mobile):
+    adult_u = User.objects.create_user(username(first_name, last_name))
+    adult_u.first_name = first_name
+    adult_u.last_name = last_name
+    adult_u.email = email
+    adult_u.save()
+
+    adult_m = Member()
+    adult_m.user = adult_u
+    adult_m.gender = gender
+    adult_m.address = address
+    adult_m.landline = landline
+    adult_m.mobile = mobile
+    adult_m.save()
+    return adult_m
 
 
-def create_child(first_name, family_name, gender, dob,
-                 carer_first_name, carer_family_name, **kwargs):
-    carer_u = User.objects.create_user(username(carer_first_name, carer_family_name))
-    carer_u.first_name = carer_first_name
-    carer_u.family_name = carer_family_name
-    carer_u.save()
-    carer_m = Member()
-    carer_m.user = carer_u
-    carer_m.save()
-
-    child_u = User.objects.create_user(username(first_name, family_name))
+def create_child(first_name, last_name, gender, dob, carer):
+    child_u = User.objects.create_user(username(first_name, last_name))
     child_u.first_name = first_name
-    child_u.family_name = family_name
+    child_u.last_name = last_name
     child_u.save()
     child_m = Member()
     child_m.user = child_u
@@ -36,16 +42,17 @@ def create_child(first_name, family_name, gender, dob,
     child_m.save()
     child_c = Child()
     child_c.member = child_m
-    child_c.carer = carer_m
+    child_c.carer = carer
     child_c.save()
+    return child_c
 
 
-def username(first_name, family_name):
-    return "%s%s)" % (str(first_name).lower(), str(family_name).lower()[0])
+def username(first_name, last_name):
+    return "%s%s" % (str(first_name).lower(), str(last_name).lower()[0])
 
 
 class Member(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, primary_key=True)
 
     gender = models.CharField(max_length=1,
                               choices=(('M', 'Male'), ('F', 'Female')),
@@ -58,35 +65,66 @@ class Member(models.Model):
                                      ('Officer', 'Officer'),
                                      ),
                             default= 'Member')
+    address = models.TextField()
 
-    mobile_number = models.CharField(max_length=16, blank=True)
-    landline_number = models.CharField(max_length=16, blank=True)
+    mobile = models.CharField(max_length=16, blank=True)
+    landline = models.CharField(max_length=16, blank=True)
 
     def __unicode__(self):
         return "%s (%s)" % (self.user.first_name, self.user.last_name)
 
 
 class Child(models.Model):
-    member = models.OneToOneField(Member)
+    member = models.OneToOneField(Member, primary_key=True)
     dob = models.DateField(help_text='Format: YYYY/MM/DD',
                            validators=[MinValueValidator(datetime.date(1900, 7, 22)),
                                        MaxValueValidator(datetime.date(2012, 12, 12))],
                            null=True)
-
+    status = models.CharField(max_length=10,
+                              choices=(('Elfin', 'Elfin'),
+                                       ('Pioneer', 'Pioneer'),
+                                       ('Woodchip', 'Woodchip'),
+                                       ('Gone', 'Gone'),
+                                       ('Waiting', 'Waiting'),
+                                       ),
+                              default= 'Elfin')
 
     carer = models.ForeignKey(Member, related_name='carer', null=True)
     carer_2 = models.ForeignKey(Member, related_name='+', null=True,  on_delete=models.SET_NULL)
     emergency_contact = models.ForeignKey(Member, related_name='+', null=True)
+    doctor = models.ForeignKey(Member, related_name='+', null=True)
 
-    allergies = models.TextField()
-    conditions = models.TextField()
-
-    doctors_name = models.CharField(max_length=15)
-    doctors_phone = models.CharField(max_length=16, blank=True)
-    doctors_address = models.TextField()
+    allergies = models.TextField(default="None")
+    conditions = models.TextField(default="No")
 
     class Meta:
         verbose_name_plural = "children"
 
     def __unicode__(self):
         return self.member.__unicode__()
+
+    def registrationFormLatex(self):
+
+        template = file('members/tex/RegistrationForm.tex.template', 'r').read()
+        dotted = dottedDict(self, 'child', {})
+        done = False
+        while not done:
+            try:
+                page = template % dotted
+                done = True
+            except KeyError, e:
+                print(":%s:" % e.message)
+                dotted[e.message] = ''
+        return page
+
+
+def dottedDict(model, name, dict):
+    for f in model._meta.fields:
+        if type(f) in [models.fields.related.ForeignKey, models.fields.related.OneToOneField]:
+            referred = getattr(model, f.name)
+            if referred is not None:
+                dottedDict(referred, '%s.%s' % (name, f.name), dict)
+        else:
+            dict['%s.%s' % (name, f.name)] = model.__dict__[f.name]
+
+    return dict

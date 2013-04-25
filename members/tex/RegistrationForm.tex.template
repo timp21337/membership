@@ -1,6 +1,6 @@
 \documentclass [12pt, a4paper] {article}
 \usepackage{tabularx}
-\usepackage{varwidth}% http://ctan.org/pkg/varwidth
+\usepackage{varwidth}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, footskip=2cm]{geometry}
@@ -8,7 +8,7 @@
 \usepackage{fullpage}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
+\usepackage{fixltx2e}
 
 \usepackage{fancyhdr}
 \usepackage{sectsty}
@@ -31,42 +31,6 @@
 
 \raggedbottom
 
-
-% use microtype if available
-\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  \usepackage{fontspec}
-  \ifxetex
-    \usepackage{xltxtra,xunicode}
-  \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
-\fi
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \usepackage[unicode=true]{hyperref}
-\fi
-\hypersetup{breaklinks=true,
-            pdfauthor={},
-            pdftitle={},
-            colorlinks=true,
-            urlcolor=blue,
-            linkcolor=magenta,
-            pdfborder={0 0 0}}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-\setcounter{secnumdepth}{0}
-
-
-%-------------------------------------------------------------------------------
-% To enable reuse the following commands should be used in the body  
-% rather than the strings they represent
 \newcommand*{\defined}{\textbf}
 \newcommand{\documentVersion}{V 1.0 } 
 \newcommand{\projectShortProperName}{Woodcraft Registration Form}
@@ -75,8 +39,7 @@
 \newcommand{\documentTypeTitle}{Registration Form}
 \newcommand{\documentName}{\projectShortProperName }
 \newcommand{\authorName}{Tim Pizey}
-\newcommand{\authorEmail}{Tim.Pizey@psych.ox.ac.uk}
-%-------------------------------------------------------------------------------
+\newcommand{\authorEmail}{Tim.Pizey@gmail.com}
 
 
 \begin{document}
@@ -88,34 +51,36 @@
 \begin{tabular}{|p{2.5cm}p{5cm}|p{2.5cm}p{5cm}|}
 \hline
 
-\textbf{Child}  & Flora Pizey & \textbf{Status} & Current \\
-\textbf{DoB} & 2004-08-22   & \textbf{Gender} & Female \\
+\textbf{Child}  & %(child.member.user.first_name)s  %(child.member.user.last_name)s & \textbf{Status} & %(child.status)s \\
+\textbf{DoB} & %(child.dob)s   & \textbf{Gender} & %(child.member.gender)s \\
 
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
 \hline
 
-\textbf{Carer}  & Tim Pizey & \textbf{Mobile} &  07768894509 \\
+\textbf{Carer}  & %(child.carer.user.first_name)s %(child.carer.user.last_name)s & \textbf{Mobile} &  %(child.carer.mobile)s \\
 
 
-\textbf{Landline}   & 01865 711036 &  \textbf{Email}        & timp$@$paneris.org                  \\
-\textbf{Address}  & \multicolumn{3}{p{12cm}|}{185 Campbell Road Oxford OX4 3NT } \\
+\textbf{Landline}   & %(child.carer.landline)s &  \textbf{Email}        & %(child.carer.user.email)s                  \\
+\textbf{Address}  & \multicolumn{3}{p{12cm}|}{ %(child.carer.address)s } \\
 \hline
-\textbf{Carer}  & Ruth Pizey & \textbf{Mobile} &  07768894509 \\
+\textbf{Carer}  & %(child.carer_2.user.first_name)s %(child.carer_2.user.last_name)s & \textbf{Mobile} &  %(child.carer_2.mobile)s \\
 
-
-\hline
-
-\multicolumn{2}{|p{7.5cm}}{\textbf{Alternative contact}  } & \multicolumn{2}{|p{7.5cm}|}{Megan Ruddock } \\
-
-\textbf{Landline} & 018657777777 & \textbf{Mobile} & 07768 894509 \\
 
 \hline
-\textbf{Doctor}  & Dr Philips &\textbf{Phone} & 01865 454545\\
+
+\textbf{Backup} &
+%(child.emergency_contact.user.first_name)s
+%(child.emergency_contact.user.last_name)s
+& \textbf{Mobile} & %(child.emergency_contact.mobile)s \\
+
+\hline
+\textbf{Doctor}  & %(child.doctor.user.first_name)s %(child.doctor.user.last_name)s
+& \textbf{Phone} & %(child.doctor.landline)s\\
 
 
 
-\textbf{Address} & \multicolumn{3}{p{12cm}|}{East Oxford Medical Centre, Manzil Way, OX4 3NT}\\
+\textbf{Address} & \multicolumn{3}{p{12cm}|}{ %(child.doctor.address)s }\\
 
 
 \hline
@@ -141,7 +106,7 @@ None
 \multicolumn{4}{|p{15cm}|}{\textbf{Any medicine regularly taken}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-None
+%(child.allergies)s
 \end{singlespace}
 }\\
 
@@ -149,7 +114,7 @@ None
 \multicolumn{4}{|p{15cm}|}{\textbf{Anything else we need to know}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-No 
+%(child.conditions)s
 \end{singlespace}
 }\\
 
@@ -161,7 +126,7 @@ No
 \multicolumn{4}{|p{15cm}|}{\textbf{Privacy}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-We take photos of group activities and use these photos on the group website and similar materials. 
+We take photos of group activities and use these photos on the group website and similar materials.
 The data on this form is held on a computer but is not publicly available.
 \end{singlespace}
 }\\
@@ -169,8 +134,8 @@ The data on this form is held on a computer but is not publicly available.
 \multicolumn{4}{|p{15cm}|}{\textbf{Declaration}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-In case of emergency, and should leaders be unable to contact me for any reason, 
-I authorise them and medical staff to act on my behalf, 
+In case of emergency, and should leaders be unable to contact me for any reason,
+I authorise them and medical staff to act on my behalf,
 knowing that I will be informed as soon as possible.
 \end{singlespace}
 }\\
@@ -181,11 +146,11 @@ knowing that I will be informed as soon as possible.
 \hline
 
 \begin{doublespace}
-Signed:  
+Signed:
 \end{doublespace}
-&                 &  Date:  &  
+&                 &  Date:  &
 \\
-              & Tim Pizey &            & 2013-04-014 \\
+              & %(child.carer.user.first_name)s %(child.carer.user.last_name)s &            & \today \\
 \hline
 \end{tabular}
 \label{tab:methodTypes}
