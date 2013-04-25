@@ -1,4 +1,4 @@
-database.sqllite
+database.sqlite
 .DS_Store
 *.log
 *.pot
