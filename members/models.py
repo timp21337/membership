@@ -118,7 +118,6 @@ class Child(models.Model):
                 page = template % dotted
                 done = True
             except KeyError, e:
-                print(":%s:" % e.message)
                 dotted[e.message] = ''
         return page
 
