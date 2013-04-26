@@ -15,4 +15,4 @@ reports
 *.pdf
 *.gz
 result.*
-members/iffley.py*
+members/management/commands/load.py*
