@@ -17,6 +17,7 @@
 \usepackage{multirow}
 \usepackage{setspace}
 \usepackage{datetime}
+\usepackage{underscore}
 
 
 \yyyymmdddate
@@ -48,20 +49,22 @@
 \linespread{1.3}
 \rhead{\projectTitle}
 \begin{table}
-\begin{tabular}{|p{2.5cm}p{5cm}|p{2.5cm}p{5cm}|}
+\begin{tabular}{|p{1.8cm}p{5.7cm}|p{1.8cm}p{5.7cm}|}
 \hline
 
-\textbf{Child}  & %(child.member.user.first_name)s  %(child.member.user.last_name)s & \textbf{Status} & %(child.status)s \\
+\textbf{Child}  & %(child.member.user.first_name)s  %(child.member.user.last_name)s
+& \textbf{Status} & %(child.status)s \\
 \textbf{DoB} & %(child.dob)s   & \textbf{Gender} & %(child.member.gender)s \\
 
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
 \hline
 
-\textbf{Carer}  & %(child.carer.user.first_name)s %(child.carer.user.last_name)s & \textbf{Mobile} &  %(child.carer.mobile)s \\
+\textbf{Carer}  & %(child.carer.user.first_name)s %(child.carer.user.last_name)s
+& \textbf{Mobile} &  %(child.carer.mobile)s \\
 
 
-\textbf{Landline}   & %(child.carer.landline)s &  \textbf{Email}        & %(child.carer.user.email)s                  \\
+\textbf{Email}        & %(child.carer.user.email)s & \textbf{Landline}   & %(child.carer.landline)s \\
 \textbf{Address}  & \multicolumn{3}{p{12cm}|}{ %(child.carer.address)s } \\
 \hline
 \textbf{Carer}  & %(child.carer_2.user.first_name)s %(child.carer_2.user.last_name)s & \textbf{Mobile} &  %(child.carer_2.mobile)s \\
@@ -91,14 +94,14 @@
 \multicolumn{4}{|p{15cm}|}{\textbf{Allergies}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-None
+%(child.allergies)s
 \end{singlespace}
 }\\
 
 \multicolumn{4}{|p{15cm}|}{\textbf{Dietary Requirements}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-None
+%(child.diet)s
 \end{singlespace}
 }\\
 
@@ -106,7 +109,7 @@ None
 \multicolumn{4}{|p{15cm}|}{\textbf{Any medicine regularly taken}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-%(child.allergies)s
+%(child.medicines)s
 \end{singlespace}
 }\\
 
