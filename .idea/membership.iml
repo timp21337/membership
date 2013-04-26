@@ -14,6 +14,7 @@
       <sourceFolder url="file://$MODULE_DIR$/fts" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/members" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/membership" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/members/management/commands" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
