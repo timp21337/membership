@@ -1,6 +1,6 @@
 
 import datetime
-
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -26,6 +26,7 @@ def create_adult(first_name, last_name, email, gender, address, landline, mobile
     adult_m.address = address
     adult_m.landline = landline
     adult_m.mobile = mobile
+    adult_m.role = 'Carer'
     adult_m.save()
     return adult_m
 
@@ -38,11 +39,13 @@ def create_child(first_name, last_name, gender, dob, carer):
     child_m = Member()
     child_m.user = child_u
     child_m.gender = gender
-    child_m.dob = dob
+
     child_m.save()
     child_c = Child()
     child_c.member = child_m
     child_c.carer = carer
+    bits = str(dob).split('-')
+    child_c.dob = date(int(bits[0]), int(bits[1]), int(bits[2]))
     child_c.save()
     return child_c
 
@@ -96,6 +99,8 @@ class Child(models.Model):
 
     allergies = models.TextField(default="None")
     conditions = models.TextField(default="No")
+    diet = models.TextField(default="None")
+    medicines = models.TextField(default="No")
 
     class Meta:
         verbose_name_plural = "children"
