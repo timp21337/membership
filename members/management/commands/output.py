@@ -1,8 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 import subprocess
-from members.models import create_adult
-from members.models import create_child
 from members.models import Child
+from members.models import Member
 
 
 class Command(BaseCommand):
@@ -24,3 +23,8 @@ class Command(BaseCommand):
         inc += '\\end{document}\n'
         file('reports/all.tex', 'w').write(inc)
         subprocess.call('pdflatex -output-directory reports reports/all.tex', shell=True)
+
+        for member in Member.objects.all():
+            if member.role not in ["Doctor", "Backup", "Member"]:
+                print member.user.first_name, member.user.last_name
+
