@@ -31,6 +31,16 @@ def create_adult(first_name, last_name, email, gender, address, landline, mobile
     return adult_m
 
 
+def create_backup(member):
+    member.role = "Backup"
+    member.save()
+
+
+def create_doctor(member):
+    member.role = "Doctor"
+    member.save()
+
+
 def create_child(first_name, last_name, gender, dob, carer):
     child_u = User.objects.create_user(username(first_name, last_name))
     child_u.first_name = first_name
@@ -63,6 +73,8 @@ class Member(models.Model):
     role = models.CharField(max_length=10,
                             choices=(('Member', 'Member'),
                                      ('Carer', 'Carer'),
+                                     ('Backup', 'Backup'),
+                                     ('Doctor', 'Doctor'),
                                      ('Helper', 'Helper'),
                                      ('Leader', 'Leader'),
                                      ('Officer', 'Officer'),
@@ -72,6 +84,10 @@ class Member(models.Model):
 
     mobile = models.CharField(max_length=16, blank=True)
     landline = models.CharField(max_length=16, blank=True)
+    crb_expiry = models.DateField(help_text='Format: YYYY/MM/DD',
+                                  validators=[MinValueValidator(datetime.date(2011, 7, 22)),
+                                              MaxValueValidator(datetime.date(2016, 12, 12))],
+                                  null=True)
 
     def __unicode__(self):
         return "%s (%s)" % (self.user.first_name, self.user.last_name)
