@@ -52,9 +52,9 @@
 \begin{tabular}{|p{1.8cm}p{5.7cm}|p{1.8cm}p{5.7cm}|}
 \hline
 
-\textbf{Child}  & %(child.member.user.first_name)s  %(child.member.user.last_name)s
+\textbf{Child}  & %(child.user.first_name)s  %(child.user.last_name)s
 & \textbf{Status} & %(child.status)s \\
-\textbf{DoB} & %(child.dob)s   & \textbf{Gender} & %(child.member.gender)s \\
+\textbf{DoB} & %(child.dob)s   & \textbf{Gender} & %(child.gender)s \\
 
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
@@ -73,9 +73,9 @@
 \hline
 
 \textbf{Backup} &
-%(child.emergency_contact.user.first_name)s
-%(child.emergency_contact.user.last_name)s
-& \textbf{Phone} & %(child.emergency_contact.mobile)s \\
+%(child.backup.user.first_name)s
+%(child.backup.user.last_name)s
+& \textbf{Phone} & %(child.backup.mobile)s \\
 
 \hline
 \textbf{Doctor}  & %(child.doctor.user.first_name)s %(child.doctor.user.last_name)s

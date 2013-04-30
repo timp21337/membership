@@ -51,19 +51,19 @@ def create_child(first_name, last_name, gender, dob, carer):
     child_m = Member()
     child_m.user = child_u
     child_m.gender = gender
-
-    child_m.save()
-    child_c = Child()
-    child_c.member = child_m
-    child_c.carer = carer
+    child_m.carer = carer
     bits = str(dob).split('-')
-    child_c.dob = date(int(bits[0]), int(bits[1]), int(bits[2]))
-    child_c.save()
-    return child_c
+    child_m.dob = date(int(bits[0]), int(bits[1]), int(bits[2]))
+    child_m.save()
+    return child_m
 
 
 def username(first_name, last_name):
-    return "%s%s" % (str(first_name).replace(' ', '').replace('-', '').lower(), str(last_name).lower()[0])
+    return "%s_%s" % (degunked(first_name), degunked(last_name))
+
+
+def degunked(string):
+    return str(string).replace(' ', '').replace('-', '').lower()
 
 
 class Member(models.Model):
@@ -91,12 +91,6 @@ class Member(models.Model):
                                               MaxValueValidator(datetime.date(2016, 12, 12))],
                                   null=True)
 
-    def __unicode__(self):
-        return "%s (%s)" % (self.user.first_name, self.user.last_name)
-
-
-class Child(models.Model):
-    member = models.OneToOneField(Member, primary_key=True)
     dob = models.DateField(help_text='Format: YYYY/MM/DD',
                            validators=[MinValueValidator(datetime.date(1900, 7, 22)),
                                        MaxValueValidator(datetime.date(2012, 12, 12))],
@@ -110,10 +104,10 @@ class Child(models.Model):
                                        ),
                               default= 'Elfin')
 
-    carer = models.ForeignKey(Member, related_name='carer', null=True)
-    carer_2 = models.ForeignKey(Member, related_name='+', null=True,  on_delete=models.SET_NULL)
-    backup = models.ForeignKey(Member, related_name='+', null=True)
-    doctor = models.ForeignKey(Member, related_name='+', null=True)
+    carer = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
+    carer_2 = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
+    backup = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
+    doctor = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
 
     allergies = models.TextField(default="None")
     conditions = models.TextField(default="No")
@@ -124,12 +118,8 @@ class Child(models.Model):
                                                MaxValueValidator(datetime.date(2016, 12, 12))],
                                    null=True)
 
-
-    class Meta:
-        verbose_name_plural = "children"
-
     def __unicode__(self):
-        return self.member.__unicode__()
+        return "%s (%s)" % (self.user.first_name, self.user.last_name)
 
     def registrationFormLatex(self):
 

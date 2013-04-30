@@ -1,7 +1,6 @@
 import subprocess
 from django.test import TestCase
 from members.models import Member
-from members.models import Child
 from members.models import dottedDict
 from members.models import create_adult
 from members.models import create_child
@@ -13,7 +12,6 @@ class MemberModelTest(TestCase):
     def test_creating_a_new_member_and_saving_it_to_the_database(self):
 
         initial_member_count = Member.objects.all().count()
-        initial_child_count = Child.objects.all().count()
 
         user = User.objects.create_user('bobp', 'bobp@paneris.org', 'password')
         user.first_name = "Bob"
@@ -22,14 +20,10 @@ class MemberModelTest(TestCase):
 
         member = Member()
         member.user = user
+        member.dob = date(2005, 07, 13)
 
         # check we can save it to the database
         member.save()
-
-        child = Child()
-        child.member = member
-        child.dob = date(2005, 07, 13)
-        child.save()
 
         # now check we can find it in the database again
         all_members_in_database = Member.objects.all()
@@ -38,15 +32,9 @@ class MemberModelTest(TestCase):
         self.assertEquals(new_member_in_database, member)
 
         self.assertEquals(new_member_in_database.user.first_name, "Bob")
-
-        all_children_in_database = Child.objects.all()
-        self.assertEquals(len(all_children_in_database), initial_child_count + 1)
-        new_child_in_database = all_children_in_database[initial_child_count]
-
-        self.assertEquals(new_child_in_database.dob, child.dob)
+        self.assertEquals(new_member_in_database.dob, member.dob)
 
         self.assertEquals('Bob (Pizey)', member.__unicode__())
-        self.assertEquals('Bob (Pizey)', child.__unicode__())
 
         user.delete()
 
