@@ -34,11 +34,13 @@ def create_adult(first_name, last_name, email, gender, address, landline, mobile
 def create_backup(member):
     member.role = "Backup"
     member.save()
+    return member
 
 
 def create_doctor(member):
     member.role = "Doctor"
     member.save()
+    return member
 
 
 def create_child(first_name, last_name, gender, dob, carer):
@@ -61,7 +63,7 @@ def create_child(first_name, last_name, gender, dob, carer):
 
 
 def username(first_name, last_name):
-    return "%s%s" % (str(first_name).lower(), str(last_name).lower()[0])
+    return "%s%s" % (str(first_name).replace(' ', '').replace('-', '').lower(), str(last_name).lower()[0])
 
 
 class Member(models.Model):
@@ -110,13 +112,18 @@ class Child(models.Model):
 
     carer = models.ForeignKey(Member, related_name='carer', null=True)
     carer_2 = models.ForeignKey(Member, related_name='+', null=True,  on_delete=models.SET_NULL)
-    emergency_contact = models.ForeignKey(Member, related_name='+', null=True)
+    backup = models.ForeignKey(Member, related_name='+', null=True)
     doctor = models.ForeignKey(Member, related_name='+', null=True)
 
     allergies = models.TextField(default="None")
     conditions = models.TextField(default="No")
     diet = models.TextField(default="None")
     medicines = models.TextField(default="No")
+    date_signed = models.DateField(help_text='Format: YYYY/MM/DD',
+                                   validators=[MinValueValidator(datetime.date(2011, 7, 22)),
+                                               MaxValueValidator(datetime.date(2016, 12, 12))],
+                                   null=True)
+
 
     class Meta:
         verbose_name_plural = "children"
