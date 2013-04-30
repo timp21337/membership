@@ -75,7 +75,7 @@
 \textbf{Backup} &
 %(child.emergency_contact.user.first_name)s
 %(child.emergency_contact.user.last_name)s
-& \textbf{Mobile} & %(child.emergency_contact.mobile)s \\
+& \textbf{Phone} & %(child.emergency_contact.mobile)s \\
 
 \hline
 \textbf{Doctor}  & %(child.doctor.user.first_name)s %(child.doctor.user.last_name)s
