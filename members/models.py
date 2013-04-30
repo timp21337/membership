@@ -1,9 +1,15 @@
+import os
 
 import datetime
 from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+import subprocess
+
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '../')
+
+print PROJECT_ROOT
 
 
 def initialise():
@@ -122,8 +128,8 @@ class Member(models.Model):
         return "%s (%s)" % (self.user.first_name, self.user.last_name)
 
     def registrationFormLatex(self):
-
-        template = file('members/tex/RegistrationForm.tex.template', 'r').read()
+        template_name = os.path.join(os.path.dirname(__file__), 'tex/RegistrationForm.tex.template')
+        template = file(template_name, 'r').read()
         dotted = dottedDict(self, 'child', {})
         done = False
         while not done:
@@ -133,6 +139,28 @@ class Member(models.Model):
             except KeyError, e:
                 dotted[e.message] = ''
         return page
+
+    @classmethod
+    def output(cls):
+        out_dir = os.path.join(PROJECT_ROOT, "reports")
+        inc = '\\documentclass [12pt, a4paper] {article}\n'
+        inc += '\\usepackage{pdfpages}\n'
+        inc += '\\begin{document}\n'
+        for kid in Member.objects.all():
+            if kid.role == "Member":
+                tex_filename = '%s/%s.tex' % (out_dir, kid.user.username)
+                pdf_filename = '%s/%s.pdf' % (out_dir, kid.user.username)
+                file(tex_filename, 'w').write(kid.registrationFormLatex())
+                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
+
+                inc += '\includepdf{' + pdf_filename + '}\n'
+        inc += '\\end{document}\n'
+        file('%s/all.tex' % out_dir, 'w').write(inc)
+        subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
+
+        for member in cls.objects.all():
+            if member.role not in ["Doctor", "Backup", "Member"]:
+                print member.user.first_name, member.user.last_name
 
 
 def dottedDict(model, name, dict):

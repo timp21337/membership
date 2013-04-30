@@ -74,3 +74,5 @@ class MemberModelTest(TestCase):
         tc.save()
         return tc
 
+    def test_output_command(self):
+        Member.output()
