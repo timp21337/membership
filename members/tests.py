@@ -1,9 +1,5 @@
-import subprocess
 from django.test import TestCase
-from members.models import Member
-from members.models import dottedDict
-from members.models import create_adult
-from members.models import create_child
+from members.models import *
 from datetime import date
 from django.contrib.auth.models import User
 
@@ -15,7 +11,7 @@ class MemberModelTest(TestCase):
 
         user = User.objects.create_user('bobp', 'bobp@paneris.org', 'password')
         user.first_name = "Bob"
-        user.last_name = "Pizey"
+        user.last_name = "Test"
         user.save()
 
         member = Member()
@@ -34,7 +30,7 @@ class MemberModelTest(TestCase):
         self.assertEquals(new_member_in_database.user.first_name, "Bob")
         self.assertEquals(new_member_in_database.dob, member.dob)
 
-        self.assertEquals('Bob (Pizey)', member.__unicode__())
+        self.assertEquals('Bob (Test)', member.__unicode__())
 
         user.delete()
 
@@ -74,5 +70,25 @@ class MemberModelTest(TestCase):
         tc.save()
         return tc
 
+    def create_child(self):
+        c1 = create_adult('Primary', 'Carer', 'primary_carer@context-computing.co.uk', 'M', 'Home Address, Oxford, OX4 3NT', '01234', '07768343434')
+        child = create_child('Child', 'One', 'F', '2004-10-27', c1)
+        child.carer_2 = create_adult('Secondary', 'Carer', 'secondary_carer@context-computing.co.uk', 'F', 'Home Address, Oxford, OX4 3NT', '01234', '07768343435')
+        child.doctor = create_doctor(create_adult('Dr', 'Test', '', 'F', 'The Surgery, Oxford', '01865 711333', '' ))
+        child.backup = create_backup(create_adult('Backup', 'Contact', '', 'F', '', '', '07768 456788'))
+        child.save()
+
     def test_output_command(self):
+        self.create_child()
         Member.output()
+        self.assert_file_exists('reports/all.pdf')
+
+    def test_carers(self):
+        self.create_child()
+        self.assertEqual(['primary_carer', 'secondary_carer'], [m.user.username for m in Member.carers()])
+
+
+
+    def assert_file_exists(self, file_path):
+        "Assert a given file exists"
+        self.assertTrue(os.path.exists(file_path), "%s does not exist!" % file_path)
