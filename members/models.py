@@ -158,9 +158,9 @@ class Member(models.Model):
         file('%s/all.tex' % out_dir, 'w').write(inc)
         subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
 
-        for member in cls.objects.all():
-            if member.role not in ["Doctor", "Backup", "Member"]:
-                print member.user.first_name, member.user.last_name
+    @classmethod
+    def carers(cls):
+        return [o for o in cls.objects.all() if o.role not in ["Doctor", "Backup", "Member"]]
 
 
 def dottedDict(model, name, dict):
