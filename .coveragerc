@@ -4,3 +4,4 @@ omit =
   members/admin.py
   *__init__.py
   fts/tests.py
+  members/management/commands/*
