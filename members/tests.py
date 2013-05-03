@@ -86,7 +86,8 @@ class MemberModelTest(TestCase):
     def test_carers(self):
         self.create_child()
         self.assertEqual(['primary_carer', 'secondary_carer'], [m.user.username for m in Member.carers()])
-
+        for m in Member.carers():
+            print (m.user.first_name, m.user.last_name, m.membership_expiry, m.crb_expiry)
 
 
     def assert_file_exists(self, file_path):

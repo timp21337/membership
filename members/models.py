@@ -96,6 +96,10 @@ class Member(models.Model):
                                   validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                               MaxValueValidator(datetime.date(2016, 12, 12))],
                                   null=True)
+    membership_expiry = models.DateField(help_text='Format: YYYY/MM/DD',
+                                         validators=[MinValueValidator(datetime.date(2011, 7, 22)),
+                                                     MaxValueValidator(datetime.date(2016, 12, 12))],
+                                         null=True)
 
     dob = models.DateField(help_text='Format: YYYY/MM/DD',
                            validators=[MinValueValidator(datetime.date(1900, 7, 22)),
@@ -157,6 +161,9 @@ class Member(models.Model):
         inc += '\\end{document}\n'
         file('%s/all.tex' % out_dir, 'w').write(inc)
         subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
+        for m in Member.carers():
+            print (m.user.first_name, m.user.last_name, m.membership_expiry, m.crb_expiry)
+
 
     @classmethod
     def carers(cls):
