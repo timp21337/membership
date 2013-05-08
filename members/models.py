@@ -144,6 +144,22 @@ class Member(models.Model):
                 dotted[e.message] = ''
         return page
 
+    def membership_expired_alert(self):
+        if self.membership_expiry is None:
+            return '-'
+        if str(self.membership_expiry) < str(date.today()):
+            return '*'
+        else:
+            return ' '
+
+    def crb_expired_alert(self):
+        if self.crb_expiry is None:
+            return '-'
+        if str(self.crb_expiry) < str(date.today()):
+            return '*'
+        else:
+            return ' '
+
     @classmethod
     def output(cls):
         out_dir = os.path.join(PROJECT_ROOT, "reports")
@@ -155,14 +171,20 @@ class Member(models.Model):
                 tex_filename = '%s/%s.tex' % (out_dir, kid.user.username)
                 pdf_filename = '%s/%s.pdf' % (out_dir, kid.user.username)
                 file(tex_filename, 'w').write(kid.registrationFormLatex())
-                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
+#                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
 
                 inc += '\includepdf{' + pdf_filename + '}\n'
         inc += '\\end{document}\n'
         file('%s/all.tex' % out_dir, 'w').write(inc)
-        subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
+   #     subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
         for m in Member.carers():
-            print (m.user.first_name, m.user.last_name, m.membership_expiry, m.crb_expiry)
+            if m.membership_expiry is not None:
+                print ("%-12s %-12s %s %s %s %s" % (m.user.first_name,
+                                                    m.user.last_name,
+                                                    m.membership_expired_alert(),
+                                                    m.membership_expiry,
+                                                    m.crb_expired_alert(),
+                                                    m.crb_expiry))
 
 
     @classmethod
