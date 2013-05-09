@@ -48,7 +48,7 @@ DATABASES = {
 if getuser() == 'jenkins':
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase'
+        'NAME': 'database.sqlite'
     }
 
 # Local time zone for this installation. Choices can be found here:
