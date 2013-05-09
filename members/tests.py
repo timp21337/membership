@@ -81,7 +81,7 @@ class MemberModelTest(TestCase):
         self.assert_file_exists('reports/all.pdf')
 
     def test_carers(self):
-        self.create_child()
+        self.create_test_child()
         self.assertEqual(['primary_carer', 'secondary_carer'], [m.username for m in Member.carers()])
         for m in Member.carers():
             print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
