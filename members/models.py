@@ -1,11 +1,13 @@
 import os
+import re
 
 import datetime
 from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-import subprocess
+from django.core import validators
+from django.utils.translation import ugettext_lazy as _
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '../')
 
@@ -13,21 +15,18 @@ print PROJECT_ROOT
 
 
 def initialise():
-    admin = User.objects.create_superuser('admin', 'timp@paneris.org', 'admin')
+    admin = User.objects.create_superuser('admin', 'adam@example.org', 'admin')
     admin.first_name = "Adam"
     admin.last_name = "Admin"
     admin.save()
 
 
 def create_adult(first_name, last_name, email, gender, address, landline, mobile):
-    adult_u = User.objects.create_user(username(first_name, last_name))
-    adult_u.first_name = first_name
-    adult_u.last_name = last_name
-    adult_u.email = email
-    adult_u.save()
-
     adult_m = Member()
-    adult_m.user = adult_u
+    adult_m.username = username(first_name, last_name)
+    adult_m.first_name = first_name
+    adult_m.last_name = last_name
+    adult_m.email = email
     adult_m.gender = gender
     adult_m.address = address
     adult_m.landline = landline
@@ -50,12 +49,10 @@ def create_doctor(member):
 
 
 def create_child(first_name, last_name, gender, dob, carer):
-    child_u = User.objects.create_user(username(first_name, last_name))
-    child_u.first_name = first_name
-    child_u.last_name = last_name
-    child_u.save()
     child_m = Member()
-    child_m.user = child_u
+    child_m.username = username(first_name, last_name)
+    child_m.first_name = first_name
+    child_m.last_name = last_name
     child_m.gender = gender
     child_m.carer = carer
     bits = str(dob).split('-')
@@ -72,8 +69,7 @@ def degunked(string):
     return str(string).replace(' ', '').replace('-', '').lower()
 
 
-class Member(models.Model):
-    user = models.OneToOneField(User, primary_key=True)
+class Member(User):
 
     gender = models.CharField(max_length=1,
                               choices=(('M', 'Male'), ('F', 'Female')),
@@ -127,9 +123,8 @@ class Member(models.Model):
                                    validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                                MaxValueValidator(datetime.date(2016, 12, 12))],
                                    null=True)
-
     def __unicode__(self):
-        return "%s (%s)" % (self.user.first_name, self.user.last_name)
+        return "%s (%s)" % (self.first_name, self.last_name)
 
     def registrationFormLatex(self):
         template_name = os.path.join(os.path.dirname(__file__), 'tex/RegistrationForm.tex.template')
@@ -168,8 +163,8 @@ class Member(models.Model):
         inc += '\\begin{document}\n'
         for kid in Member.objects.all():
             if kid.role == "Member":
-                tex_filename = '%s/%s.tex' % (out_dir, kid.user.username)
-                pdf_filename = '%s/%s.pdf' % (out_dir, kid.user.username)
+                tex_filename = '%s/%s.tex' % (out_dir, kid.username)
+                pdf_filename = '%s/%s.pdf' % (out_dir, kid.username)
                 file(tex_filename, 'w').write(kid.registrationFormLatex())
 #                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
 
@@ -179,8 +174,8 @@ class Member(models.Model):
    #     subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
         for m in Member.carers():
             if m.membership_expiry is not None:
-                print ("%-12s %-12s %s %s %s %s" % (m.user.first_name,
-                                                    m.user.last_name,
+                print ("%-12s %-12s %s %s %s %s" % (m.first_name,
+                                                    m.last_name,
                                                     m.membership_expired_alert(),
                                                     m.membership_expiry,
                                                     m.crb_expired_alert(),

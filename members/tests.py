@@ -1,7 +1,6 @@
 from django.test import TestCase
 from members.models import *
 from datetime import date
-from django.contrib.auth.models import User
 
 
 class MemberModelTest(TestCase):
@@ -9,13 +8,11 @@ class MemberModelTest(TestCase):
 
         initial_member_count = Member.objects.all().count()
 
-        user = User.objects.create_user('bobp', 'bobp@paneris.org', 'password')
-        user.first_name = "Bob"
-        user.last_name = "Test"
-        user.save()
-
         member = Member()
-        member.user = user
+        member.username = 'bobp'
+        member.email = 'bobp@example.org'
+        member.first_name = "Bob"
+        member.last_name = "Test"
         member.dob = date(2005, 07, 13)
 
         # check we can save it to the database
@@ -27,12 +24,11 @@ class MemberModelTest(TestCase):
         new_member_in_database = all_members_in_database[initial_member_count]
         self.assertEquals(new_member_in_database, member)
 
-        self.assertEquals(new_member_in_database.user.first_name, "Bob")
+        self.assertEquals(new_member_in_database.first_name, "Bob")
         self.assertEquals(new_member_in_database.dob, member.dob)
 
         self.assertEquals('Bob (Test)', member.__unicode__())
 
-        user.delete()
 
     def test_serialize_to_dict(self):
         c = self.create_test_child()
@@ -85,10 +81,9 @@ class MemberModelTest(TestCase):
 
     def test_carers(self):
         self.create_child()
-        self.assertEqual(['primary_carer', 'secondary_carer'], [m.user.username for m in Member.carers()])
+        self.assertEqual(['primary_carer', 'secondary_carer'], [m.username for m in Member.carers()])
         for m in Member.carers():
-            print (m.user.first_name, m.user.last_name, m.membership_expiry, m.crb_expiry)
-
+            print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
 
     def assert_file_exists(self, file_path):
         "Assert a given file exists"

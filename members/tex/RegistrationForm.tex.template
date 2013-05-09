@@ -52,7 +52,7 @@
 \begin{tabular}{|p{1.8cm}p{5.7cm}|p{1.8cm}p{5.7cm}|}
 \hline
 
-\textbf{Child}  & %(child.user.first_name)s  %(child.user.last_name)s
+\textbf{Child}  & %(child.first_name)s  %(child.last_name)s
 & \textbf{Status} & %(child.status)s \\
 \textbf{DoB} & %(child.dob)s   & \textbf{Gender} & %(child.gender)s \\
 
@@ -60,25 +60,25 @@
 \multicolumn{4}{p{15cm}}{ }\\
 \hline
 
-\textbf{Carer}  & %(child.carer.user.first_name)s %(child.carer.user.last_name)s
+\textbf{Carer}  & %(child.carer.first_name)s %(child.carer.last_name)s
 & \textbf{Mobile} &  %(child.carer.mobile)s \\
 
 
-\textbf{Email}        & %(child.carer.user.email)s & \textbf{Landline}   & %(child.carer.landline)s \\
+\textbf{Email}        & %(child.carer.email)s & \textbf{Landline}   & %(child.carer.landline)s \\
 \textbf{Address}  & \multicolumn{3}{p{12cm}|}{ %(child.carer.address)s } \\
 \hline
-\textbf{Carer}  & %(child.carer_2.user.first_name)s %(child.carer_2.user.last_name)s & \textbf{Mobile} &  %(child.carer_2.mobile)s \\
+\textbf{Carer}  & %(child.carer_2.first_name)s %(child.carer_2.last_name)s & \textbf{Mobile} &  %(child.carer_2.mobile)s \\
 
 
 \hline
 
 \textbf{Backup} &
-%(child.backup.user.first_name)s
-%(child.backup.user.last_name)s
+%(child.backup.first_name)s
+%(child.backup.last_name)s
 & \textbf{Phone} & %(child.backup.mobile)s \\
 
 \hline
-\textbf{Doctor}  & %(child.doctor.user.first_name)s %(child.doctor.user.last_name)s
+\textbf{Doctor}  & %(child.doctor.first_name)s %(child.doctor.last_name)s
 & \textbf{Phone} & %(child.doctor.landline)s\\
 
 
@@ -153,7 +153,7 @@ Signed:
 \end{doublespace}
 &                 &  Date:  &
 \\
-              & %(child.carer.user.first_name)s %(child.carer.user.last_name)s &            & \today \\
+              & %(child.carer.first_name)s %(child.carer.last_name)s &            & \today \\
 \hline
 \end{tabular}
 \label{tab:methodTypes}
