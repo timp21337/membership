@@ -29,7 +29,6 @@ class MemberModelTest(TestCase):
 
         self.assertEquals('Bob (Test)', member.__unicode__())
 
-
     def test_serialize_to_dict(self):
         c = self.create_test_child()
         print(dottedDict(c, 'child', {}))
@@ -46,8 +45,9 @@ class MemberModelTest(TestCase):
 #        subprocess.call('pdflatex ./result.tex', shell=True)
 
     def create_test_child_with_nulls(self):
-        c1 = create_adult('Tim', 'Test', 'timp@example.org', 'M', '15 Campbell Road, Oxford, OX4 3NT',
-                                       '01865 711036', '07768 894509')
+        c1 = create_adult('Tim', 'Test', 'timp@example.org', 'M',
+                          '15 Campbell Road, Oxford, OX4 3NT',
+                          '01865 711036', '07768 894509')
         c1.membership_expiry = date(2012, 01, 28)
         c1.crb_expiry = date(2013, 01, 28)
         c1.save()
@@ -75,16 +75,8 @@ class MemberModelTest(TestCase):
         tc.save()
         return tc
 
-    def create_child(self):
-        c1 = create_adult('Primary', 'Carer', 'primary_carer@context-computing.co.uk', 'M', 'Home Address, Oxford, OX4 3NT', '01234', '07768343434')
-        child = create_child('Child', 'One', 'F', '2004-10-27', c1)
-        child.carer_2 = create_adult('Secondary', 'Carer', 'secondary_carer@context-computing.co.uk', 'F', 'Home Address, Oxford, OX4 3NT', '01234', '07768343435')
-        child.doctor = create_doctor(create_adult('Dr', 'Test', '', 'F', 'The Surgery, Oxford', '01865 711333', '' ))
-        child.backup = create_backup(create_adult('Backup', 'Contact', '', 'F', '', '', '07768 456788'))
-        child.save()
-
     def test_output_command(self):
-        self.create_child()
+        self.create_test_child()
         Member.output()
         self.assert_file_exists('reports/all.pdf')
 
@@ -95,5 +87,5 @@ class MemberModelTest(TestCase):
             print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
 
     def assert_file_exists(self, file_path):
-        "Assert a given file exists"
+        """Assert a given file exists"""
         self.assertTrue(os.path.exists(file_path), "%s does not exist!" % file_path)
