@@ -89,6 +89,7 @@ class MemberModelTest(TestCase):
 
     def test_output_command(self):
         self.create_test_child()
+        self.create_test_child_with_nulls()
         Member.output()
         self.assert_file_exists('reports/all.pdf')
 
@@ -97,8 +98,6 @@ class MemberModelTest(TestCase):
         self.create_test_child_with_nulls()
         self.assertEqual(['primary_carer', 'secondary_carer', 'tim_test', 'ruth_test'],
                          [m.username for m in Member.carers()])
-        for m in Member.carers():
-            print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
 
     def assert_file_exists(self, file_path):
         """Assert a given file exists"""
