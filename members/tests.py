@@ -78,9 +78,11 @@ class MemberModelTest(TestCase):
 
         c2.save()
         tc.carer_2 = c2
-        tc.emergency_contact = create_adult("Second", "Line", "second@example.org", "F", "", "", "07768 894509")
+        tc.emergency_contact = create_backup(
+            create_adult("Second", "Line", "second@example.org", "F", "", "", "07768 894509"))
 
-        tc.doctor = create_adult("Dr", "Rahim", "", "M", "1 Manzil Way, Oxford OX4 3NT", "01865 77343", "")
+        tc.doctor = create_doctor(
+            create_adult("Dr", "Rahim", "", "M", "1 Manzil Way, Oxford OX4 3NT", "01865 77343", ""))
         tc.allergies = "penicillin, pineapple"
         tc.save()
         return tc
@@ -92,7 +94,9 @@ class MemberModelTest(TestCase):
 
     def test_carers(self):
         self.create_test_child()
-        self.assertEqual(['primary_carer', 'secondary_carer', 'second_line', 'dr_rahim'], [m.username for m in Member.carers()])
+        self.create_test_child_with_nulls()
+        self.assertEqual(['primary_carer', 'secondary_carer', 'tim_test', 'ruth_test'],
+                         [m.username for m in Member.carers()])
         for m in Member.carers():
             print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
 
