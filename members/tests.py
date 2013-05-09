@@ -82,7 +82,7 @@ class MemberModelTest(TestCase):
 
     def test_carers(self):
         self.create_test_child()
-        self.assertEqual(['primary_carer', 'secondary_carer'], [m.username for m in Member.carers()])
+        self.assertEqual(['primary_carer', 'secondary_carer', 'catch_line', 'dr_rahim'], [m.username for m in Member.carers()])
         for m in Member.carers():
             print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
 
