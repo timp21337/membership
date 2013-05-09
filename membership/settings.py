@@ -1,5 +1,7 @@
 import os
+import sys
 
+# sudo pip install dj_database_url
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
@@ -32,10 +34,8 @@ MANAGERS = ADMINS
 APPLICATION_SHORT_NAME = 'membership'
 APPLICATION_TITLE = 'Membership (development)'
 
-
 DATABASES = {
     'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'membership',                      # Or path to database file if using sqlite3.
         'USER': 'postgres',                      # Not used with sqlite3.
@@ -45,6 +45,11 @@ DATABASES = {
     },
 
 }
+if os.getusername() == 'jenkins':
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
