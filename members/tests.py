@@ -51,7 +51,7 @@ class MemberModelTest(TestCase):
         c1.membership_expiry = date(2012, 01, 28)
         c1.crb_expiry = date(2013, 01, 28)
         c1.save()
-        tc = create_child('Tester', 'Test', 'F', '2004-08-22',
+        tc = create_child('Testy', 'Test', 'F', '2004-08-22',
                           c1)
         c2 = create_adult("Ruth", "Test", "Ruth@Test.net", "F", "", "", "07768894509")
         c2.membership_expiry = date(2013, 8, 28)
@@ -59,17 +59,27 @@ class MemberModelTest(TestCase):
 
         c2.save()
         tc.carer_2 = c2
-        tc.emergency_contact = create_adult("Second", "Line", "second@example.org", "F", "", "", "07768 894509")
         tc.save()
         return tc
 
     def create_test_child(self):
         self.maxDiff = None
-        tc = create_child('Jester', 'Jest', 'F', '2004-08-22',
-                          create_adult('Primary', 'Carer', 'timp@example.org', 'M', '15 Campbell Road, Oxford, OX4 3NT',
-                                       '01865 711036', '07768 894509'))
-        tc.carer_2 = create_adult("Secondary", "Carer", "Ruth@Test.net", "F", "", "", "07768894509")
-        tc.emergency_contact = create_adult("Catch", "Line", "second@example.org", "F", "", "", "07768 894509")
+        c1 = create_adult('Primary', 'Carer', 'timp@example.org', 'M',
+                          '15 Campbell Road, Oxford, OX4 3NT',
+                          '01865 711036', '07768 894509')
+        c1.membership_expiry = date(2012, 01, 28)
+        c1.crb_expiry = date(2013, 01, 28)
+        c1.save()
+        tc = create_child('Tester', 'Test', 'F', '2004-08-22',
+                          c1)
+        c2 = create_adult("Secondary", "Carer", "Ruth@Test.net", "F", "009", "08765", "07768894509")
+        c2.membership_expiry = date(2013, 8, 28)
+        c2.crb_expiry = date(2012, 01, 28)
+
+        c2.save()
+        tc.carer_2 = c2
+        tc.emergency_contact = create_adult("Second", "Line", "second@example.org", "F", "", "", "07768 894509")
+
         tc.doctor = create_adult("Dr", "Rahim", "", "M", "1 Manzil Way, Oxford OX4 3NT", "01865 77343", "")
         tc.allergies = "penicillin, pineapple"
         tc.save()
@@ -82,7 +92,7 @@ class MemberModelTest(TestCase):
 
     def test_carers(self):
         self.create_test_child()
-        self.assertEqual(['primary_carer', 'secondary_carer', 'catch_line', 'dr_rahim'], [m.username for m in Member.carers()])
+        self.assertEqual(['primary_carer', 'secondary_carer', 'second_line', 'dr_rahim'], [m.username for m in Member.carers()])
         for m in Member.carers():
             print (m.first_name, m.last_name, m.membership_expiry, m.crb_expiry)
 
