@@ -66,9 +66,9 @@ class MemberModelTest(TestCase):
     def create_test_child(self):
         self.maxDiff = None
         tc = create_child('Jester', 'Jest', 'F', '2004-08-22',
-                          create_adult('Jim', 'Test', 'timp@example.org', 'M', '15 Campbell Road, Oxford, OX4 3NT',
+                          create_adult('Primary', 'Carer', 'timp@example.org', 'M', '15 Campbell Road, Oxford, OX4 3NT',
                                        '01865 711036', '07768 894509'))
-        tc.carer_2 = create_adult("Ruth", "Jest", "Ruth@Test.net", "F", "", "", "07768894509")
+        tc.carer_2 = create_adult("Secondary", "Carer", "Ruth@Test.net", "F", "", "", "07768894509")
         tc.emergency_contact = create_adult("Catch", "Line", "second@example.org", "F", "", "", "07768 894509")
         tc.doctor = create_adult("Dr", "Rahim", "", "M", "1 Manzil Way, Oxford OX4 3NT", "01865 77343", "")
         tc.allergies = "penicillin, pineapple"
