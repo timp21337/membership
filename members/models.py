@@ -1,13 +1,12 @@
 import os
-import re
+import subprocess
 
 import datetime
 from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core import validators
-from django.utils.translation import ugettext_lazy as _
+
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '../')
 
@@ -84,23 +83,26 @@ class Member(User):
                                      ('Officer', 'Officer'),
                                      ),
                             default= 'Member')
-    address = models.TextField()
+    address = models.TextField(blank=True)
 
     mobile = models.CharField(max_length=16, blank=True)
     landline = models.CharField(max_length=16, blank=True)
     crb_expiry = models.DateField(help_text='Format: YYYY/MM/DD',
                                   validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                               MaxValueValidator(datetime.date(2016, 12, 12))],
-                                  null=True)
+                                  null=True,
+                                  blank=True)
     membership_expiry = models.DateField(help_text='Format: YYYY/MM/DD',
                                          validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                                      MaxValueValidator(datetime.date(2016, 12, 12))],
-                                         null=True)
+                                         null=True,
+                                         blank=True)
 
-    dob = models.DateField(help_text='Format: YYYY/MM/DD',
+    dob = models.DateField(help_text='Format: YYYY-MM-DD',
                            validators=[MinValueValidator(datetime.date(1900, 7, 22)),
                                        MaxValueValidator(datetime.date(2012, 12, 12))],
-                           null=True)
+                           null=True,
+                           blank=True)
     status = models.CharField(max_length=10,
                               choices=(('Elfin', 'Elfin'),
                                        ('Pioneer', 'Pioneer'),
@@ -110,19 +112,24 @@ class Member(User):
                                        ),
                               default= 'Elfin')
 
-    carer = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
-    carer_2 = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
-    backup = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
-    doctor = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL)
+    carer = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    carer_2 = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    backup = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    doctor = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
 
     allergies = models.TextField(default="None")
     conditions = models.TextField(default="No")
     diet = models.TextField(default="None")
     medicines = models.TextField(default="No")
-    date_signed = models.DateField(help_text='Format: YYYY/MM/DD',
+    date_signed = models.DateField(help_text='Format: YYYY-MM-DD',
                                    validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                                MaxValueValidator(datetime.date(2016, 12, 12))],
-                                   null=True)
+                                   null=True,
+                                   blank=True)
+
+    class Meta:
+        ordering = ['username']
+
     def __unicode__(self):
         return "%s (%s)" % (self.first_name, self.last_name)
 
@@ -166,12 +173,12 @@ class Member(User):
                 tex_filename = '%s/%s.tex' % (out_dir, kid.username)
                 pdf_filename = '%s/%s.pdf' % (out_dir, kid.username)
                 file(tex_filename, 'w').write(kid.registrationFormLatex())
-#                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
+                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
 
                 inc += '\includepdf{' + pdf_filename + '}\n'
         inc += '\\end{document}\n'
         file('%s/all.tex' % out_dir, 'w').write(inc)
-   #     subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
+        subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
         for m in Member.carers():
             if m.membership_expiry is not None:
                 print ("%-12s %-12s %s %s %s %s" % (m.first_name,
