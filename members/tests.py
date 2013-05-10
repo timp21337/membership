@@ -96,7 +96,7 @@ class MemberModelTest(TestCase):
     def test_carers(self):
         self.create_test_child()
         self.create_test_child_with_nulls()
-        self.assertEqual(['primary_carer', 'secondary_carer', 'tim_test', 'ruth_test'],
+        self.assertEqual(['primary_carer', 'ruth_test', 'secondary_carer', 'tim_test'],
                          [m.username for m in Member.carers()])
 
     def assert_file_exists(self, file_path):
