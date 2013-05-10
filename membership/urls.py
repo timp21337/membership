@@ -15,4 +15,12 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    url(r'^(favicon\.ico)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    url(r'^robots\.txt$', 'django.views.static.serve', {'template': 'robots.txt', 'mimetype': 'text/plain'}),
+    url(r'^$', 'membership.views.home'),
+    url(r'^home$', 'membership.views.home'),
+    url(r'^login$', 'membership.views.login'),
+    url(r'^logout$', 'membership.views.logout'),
+    url(r'^carers$', 'membership.views.carers'),
+
 )

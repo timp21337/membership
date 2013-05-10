@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% block content %}
+
+<h2>Carers</h2>
+<table class="table table-striped" frame='box' bordercolor='green'>
+  <tr>
+      <th>Name</th>
+      <th>Membership</th>
+      <th>CRB</th>
+  </tr>
+  {% for carer in carers %}
+  <tr>
+    <th>{{ carer.first_name }} {{ carer.last_name }}</th>
+    <td {%  if carer.membership_expired_alert == '*' %}
+        style="color:red;"
+        {% endif %}
+    >
+
+        {{ carer.membership_expiry }}
+    </td>
+    <td {%  if carer.crb_expired_alert == '*' %}
+        style="color:red;"
+        {% endif %}
+    >
+        {{ carer.crb_expiry }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

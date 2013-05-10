@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="{{ static_url }}/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="{{ static_url }}/css/style.css">
+    <link rel="shortcut icon" href="{{ static_url }}/favicon.ico" />
+    <title>{{ TITLE }}</title>
+</head>
+
+<body>
+<div class="row">
+    <div class="span3">
+        <a href="http://www.woodcraft.org.uk/"><img src="{{ static_url }}logo.png" style="padding: 10px;" alt="{{ TITLE }}"></a>
+    </div>
+    <div class="span9 ">
+        <h1><a href="http://iffley-fields-woodies.blogspot.co.uk/">{{ TITLE }}</a></h1>
+        {% if app_messages %}
+            <div class="alert alert-success">
+                <!--NEEDS THE ALERT PLUGIN FOR BOOTSTRAP
+                    button type="button" class="close" data-dismiss="alert">&times;</button-->
+                {% for message in app_messages %}
+                    <b>{{ message }}</b><br>
+                {% empty %}
+                    empty &nbsp;
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row" style="position:relative">
+    <div class="span3">
+        {% block sidebar %}
+        {% if username %}
+            <a href="logout">Logout</a>
+            <br/><a href="home">Home</a>
+            <br/><a href="carers">Carers</a>
+            <br/><a href="admin">Admin</a>
+        {%  else %}
+            <a href="login">Login</a>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    <div class="span9">
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+</div>
+<div style="float:right; position:relative; margin-right: 1cm; margin-top:2cm;">
+    &copy;  <a href="http://tim.pizey.net/">Tim Pizey 2013</a>
+</div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+</html>

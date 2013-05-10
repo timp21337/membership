@@ -1,0 +1,13 @@
+{% extends "template.html" %}
+{% block content %}
+
+
+<table class="table table-striped" frame='box' bordercolor='green'>
+  {% for key, value in summary.items %}
+  <tr>
+    <th>{{ key }}</th>
+    <td>{{ value }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

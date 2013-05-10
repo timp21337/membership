@@ -193,6 +193,21 @@ class Member(User):
     def carers(cls):
         return [o for o in cls.objects.all() if o.role not in ["Doctor", "Backup", "Member"]]
 
+    @classmethod
+    def member_with_status(cls, status):
+        return [o for o in cls.objects.all() if o.role in ["Member"] and o.status == status]
+
+    @classmethod
+    def elfins(cls):
+        return Member.member_with_status('Elfin')
+
+    @classmethod
+    def woodchips(cls):
+        return Member.member_with_status('Woodchip')
+
+    @classmethod
+    def waiters(cls):
+        return Member.member_with_status('Waiting')
 
 def dottedDict(model, name, dict):
     for f in model._meta.fields:
