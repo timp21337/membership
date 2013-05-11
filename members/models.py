@@ -3,7 +3,7 @@ import subprocess
 
 import datetime
 from datetime import date
-from django.db import models
+from django.db import models, connection
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -187,7 +187,7 @@ class Member(User):
                                                     m.membership_expiry,
                                                     m.crb_expired_alert(),
                                                     m.crb_expiry))
-
+        connection.close()
 
     @classmethod
     def carers(cls):
