@@ -4,15 +4,18 @@
     <link href="{{ static_url }}/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="{{ static_url }}/css/style.css">
     <link rel="shortcut icon" href="{{ static_url }}/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <link href="{{ static_url }}/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <title>{{ TITLE }}</title>
 </head>
 
 <body>
+<div class='container'>
 <div class="row">
-    <div class="span3">
+    <div class="span2">
         <a href="http://www.woodcraft.org.uk/"><img src="{{ static_url }}logo.png" style="padding: 10px;" alt="{{ TITLE }}"></a>
     </div>
-    <div class="span9 ">
+    <div class="span7 ">
         <h1><a href="http://iffley-fields-woodies.blogspot.co.uk/">{{ TITLE }}</a></h1>
         {% if app_messages %}
             <div class="alert alert-success">
@@ -28,8 +31,8 @@
     </div>
 </div>
 
-<div class="row" style="position:relative">
-    <div class="span3">
+<div class="row">
+    <div class="span2">
         {% block sidebar %}
         {% if username %}
             <a href="logout">Logout</a>
@@ -43,12 +46,13 @@
         {% endblock %}
     </div>
 
-    <div class="span9">
+    <div class="span7">
 
         {% block content %}{% endblock %}
 
     </div>
 
+</div>
 </div>
 <div style="float:right; position:relative; margin-right: 1cm; margin-top:2cm;">
     &copy;  <a href="http://tim.pizey.net/">Tim Pizey 2013</a>
