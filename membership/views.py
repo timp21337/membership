@@ -86,7 +86,7 @@ def counts(members):
 def _home(request, db=None, ctx=None):
     t = loader.get_template('home.html')
     ctx['summary'] = OrderedDict([
-        ('Waiting list', counts(Member.waiters())),
+        ('Waiting', counts(Member.waiters())),
         ('Elfin', counts(Member.elfins())),
         ('Woodchip', counts(Member.woodchips())),
         ('Carer', counts(Member.carers())),
