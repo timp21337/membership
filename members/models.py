@@ -31,18 +31,22 @@ def create_adult(first_name, last_name, email, gender, address, landline, mobile
     adult_m.landline = landline
     adult_m.mobile = mobile
     adult_m.role = 'Carer'
+    adult_m.status = 'Carer'
     adult_m.save()
     return adult_m
 
 
 def create_backup(member):
     member.role = "Backup"
+    member.status = 'Carer'
+    member.status = 'Backup'
     member.save()
     return member
 
 
 def create_doctor(member):
     member.role = "Doctor"
+    member.status = 'Doctor'
     member.save()
     return member
 
@@ -56,6 +60,7 @@ def create_child(first_name, last_name, gender, dob, carer):
     child_m.carer = carer
     bits = str(dob).split('-')
     child_m.dob = date(int(bits[0]), int(bits[1]), int(bits[2]))
+    child_m.status = 'Elfin'
     child_m.save()
     return child_m
 
@@ -133,6 +138,17 @@ class Member(User):
     def __unicode__(self):
         return "%s (%s)" % (self.first_name, self.last_name)
 
+    def is_adult(self):
+        if self.role in ['Carer',
+                         'Backup',
+                         'Doctor',
+                         'Helper',
+                         'Leader',
+                         'Officer']:
+            return True
+        else:
+            return False
+
     def registrationFormLatex(self):
         template_name = os.path.join(os.path.dirname(__file__), 'tex/RegistrationForm.tex.template')
         template = file(template_name, 'r').read()
@@ -194,20 +210,29 @@ class Member(User):
         return [o for o in cls.objects.all() if o.role not in ["Doctor", "Backup", "Member"]]
 
     @classmethod
-    def member_with_status(cls, status):
+    def members_with_status(cls, status):
         return [o for o in cls.objects.all() if o.role in ["Member"] and o.status == status]
 
     @classmethod
     def elfins(cls):
-        return Member.member_with_status('Elfin')
+        return Member.members_with_status('Elfin')
 
     @classmethod
     def woodchips(cls):
-        return Member.member_with_status('Woodchip')
+        return Member.members_with_status('Woodchip')
 
     @classmethod
     def waiters(cls):
-        return Member.member_with_status('Waiting')
+        return Member.members_with_status('Waiting')
+
+    @classmethod
+    def boys(cls, list):
+        return [i for i in list if i.gender == 'M']
+
+    @classmethod
+    def girls(cls, list):
+        return [i for i in list if i.gender == 'F']
+
 
 def dottedDict(model, name, dict):
     for f in model._meta.fields:

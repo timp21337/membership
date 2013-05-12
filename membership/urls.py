@@ -22,5 +22,7 @@ urlpatterns = patterns('',
     url(r'^login$', 'membership.views.login'),
     url(r'^logout$', 'membership.views.logout'),
     url(r'^carers$', 'membership.views.carers'),
+    url(r'^members$', 'membership.views.members'),
+    url(r'^member$', 'membership.views.member'),
 
 )

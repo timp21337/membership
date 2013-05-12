@@ -1,6 +1,8 @@
 __author__ = 'timp'
 
 
+class AppError(StandardError):
+    app = "membership"
 
 def checkPasswordCompliance(password):
     hasAny = lambda cs: True in [c in password for c in cs]

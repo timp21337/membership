@@ -7,14 +7,14 @@ from django.contrib.auth import logout as _logout
 from django.contrib.auth import login as _login
 from collections import OrderedDict
 import forms
-import members.models
+from members.models import Member
+
+from app import AppError
 
 
 def context_processor(request):
     """Run to provide every template context with some standard variables"""
-    ctx = {
-        'TITLE': 'Iffley Fields Woodcraft Folk Elfins Group'
-    }
+    ctx = {'TITLE': 'Iffley Fields Woodcraft Folk Elfins Group'}
     ctx['static_url'] = settings.STATIC_URL
     if request.user.is_authenticated():
         ctx['username'] = request.user.username
@@ -79,14 +79,20 @@ def requireSession(view):
     return session_wrapper
 
 
+def counts(members):
+    return [len(Member.boys(members)), len(Member.girls(members)), len(members)]
+
+
 def _home(request, db=None, ctx=None):
     t = loader.get_template('home.html')
     ctx['summary'] = OrderedDict([
-        ('Waiting list', len(members.models.Member.waiters())),
-        ('Elfins', len(members.models.Member.elfins())),
-        ('Woodchips', len(members.models.Member.woodchips())),
-        ('Carers', len(members.models.Member.carers())),
+        ('Waiting list', counts(Member.waiters())),
+        ('Elfin', counts(Member.elfins())),
+        ('Woodchip', counts(Member.woodchips())),
+        ('Carer', counts(Member.carers())),
     ])
+    ctx['Member'] = Member
+
     return HttpResponse(t.render(RequestContext(request, ctx)))
 
 
@@ -121,7 +127,7 @@ def login(request, db=None, ctx={}):
 
 def _carers(request, db=None, ctx={}):
     t = loader.get_template('carers.html')
-    ctx['carers'] = members.models.Member.carers()
+    ctx['carers'] = Member.carers()
     return HttpResponse(t.render(RequestContext(request, ctx)))
 
 @requireSession
@@ -131,3 +137,40 @@ def carers(request, db=None, ctx={}):
     Carers with expiry dates.
     """
     return _carers(request, db, ctx)
+
+
+def _members(request, db=None, ctx={}):
+    t = loader.get_template('members.html')
+    try:
+        status = request.REQUEST['status']
+    except StandardError:
+        status = 'Elfin'
+    ctx['members'] = Member.members_with_status(status)
+    return HttpResponse(t.render(RequestContext(request, ctx)))
+
+@requireSession
+def members(request, db=None, ctx={}):
+    """Members
+
+    """
+    return _members(request, db, ctx)
+
+
+def _member(request, db=None, ctx={}):
+    username = request.REQUEST['username']
+    if username is None:
+        raise AppError("Parameter 'username' missing from request")
+    t = loader.get_template('member.html')
+    try:
+        ctx['member'] = Member.objects.get(username=request.REQUEST['username'])
+    except Member.DoesNotExist:
+        raise AppError("Nonexistent username '%s' given" % username)
+    return HttpResponse(t.render(RequestContext(request, ctx)))
+
+@requireSession
+def member(request, db=None, ctx={}):
+    """Member
+
+    A members details.
+    """
+    return _member(request, db, ctx)

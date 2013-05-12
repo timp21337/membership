@@ -8,21 +8,20 @@
       <th>Membership</th>
       <th>CRB</th>
   </tr>
-  {% for carer in carers %}
+  {% for member in carers %}
   <tr>
-    <th>{{ carer.first_name }} {{ carer.last_name }}</th>
-    <td {%  if carer.membership_expired_alert == '*' %}
+    <th><a href="member?username={{ member.username }}"> {{ member.first_name }} {{ member.last_name }}</a></th>
+    <td {%  if member.membership_expired_alert == '*' %}
         style="color:red;"
         {% endif %}
     >
-
-        {{ carer.membership_expiry }}
+        {{ member.membership_expiry }}
     </td>
-    <td {%  if carer.crb_expired_alert == '*' %}
+    <td {%  if member.crb_expired_alert == '*' %}
         style="color:red;"
         {% endif %}
     >
-        {{ carer.crb_expiry }}
+        {{ member.crb_expiry }}
     </td>
   </tr>
   {% endfor %}

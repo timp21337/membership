@@ -1,0 +1,24 @@
+{% extends "template.html" %}
+{% block content %}
+
+<h2>members</h2>
+<table class="table table-striped" frame='box' bordercolor='green'>
+  <tr>
+      <th>Name</th>
+      <th>DoB</th>
+      <th>Gender</th>
+  </tr>
+  {% for member in members %}
+  <tr>
+    <th><a href="member?username={{ member.username }}"> {{ member.first_name }} {{ member.last_name }}</a></th>
+    <td>
+
+        {{ member.dob }}
+    </td>
+    <td>
+        {{ member.gender }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
