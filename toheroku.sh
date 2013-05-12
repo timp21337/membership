@@ -6,4 +6,4 @@ createdb --user postgres membership
 
 git push heroku master
 
-/usr/bin/heroku db:push --confirm wfolktest postgres://postgres:*@127.0.0.1:5432/membership
+/usr/bin/heroku db:push --confirm ifwfe postgres://postgres:*@127.0.0.1:5432/membership
