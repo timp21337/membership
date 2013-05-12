@@ -38,7 +38,6 @@ def create_adult(first_name, last_name, email, gender, address, landline, mobile
 
 def create_backup(member):
     member.role = "Backup"
-    member.status = 'Carer'
     member.status = 'Backup'
     member.save()
     return member
@@ -78,6 +77,16 @@ class Member(User):
     gender = models.CharField(max_length=1,
                               choices=(('M', 'Male'), ('F', 'Female')),
                               default= 'F')
+    address = models.TextField(blank=True)
+
+    mobile = models.CharField(max_length=16, blank=True)
+    landline = models.CharField(max_length=16, blank=True)
+
+    dob = models.DateField(help_text='Format: YYYY-MM-DD',
+                           validators=[MinValueValidator(datetime.date(1900, 7, 22)),
+                                       MaxValueValidator(datetime.date(2012, 12, 12))],
+                           null=True,
+                           blank=True)
     role = models.CharField(max_length=10,
                             choices=(('Member', 'Member'),
                                      ('Carer', 'Carer'),
@@ -88,10 +97,23 @@ class Member(User):
                                      ('Officer', 'Officer'),
                                      ),
                             default= 'Member')
-    address = models.TextField(blank=True)
+    status = models.CharField(max_length=10,
+                              choices=(('Elfin', 'Elfin'),
+                                       ('Pioneer', 'Pioneer'),
+                                       ('Woodchip', 'Woodchip'),
+                                       ('Gone', 'Gone'),
+                                       ('Waiting', 'Waiting'),
+                                       ('Carer', 'Carer'),
+                                       ('Doctor', 'Doctor'),
+                                       ),
+                              null=True,
+                              blank=True)
 
-    mobile = models.CharField(max_length=16, blank=True)
-    landline = models.CharField(max_length=16, blank=True)
+    carer = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    carer_2 = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    backup = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    doctor = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+
     crb_expiry = models.DateField(help_text='Format: YYYY/MM/DD',
                                   validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                               MaxValueValidator(datetime.date(2016, 12, 12))],
@@ -102,26 +124,6 @@ class Member(User):
                                                      MaxValueValidator(datetime.date(2016, 12, 12))],
                                          null=True,
                                          blank=True)
-
-    dob = models.DateField(help_text='Format: YYYY-MM-DD',
-                           validators=[MinValueValidator(datetime.date(1900, 7, 22)),
-                                       MaxValueValidator(datetime.date(2012, 12, 12))],
-                           null=True,
-                           blank=True)
-    status = models.CharField(max_length=10,
-                              choices=(('Elfin', 'Elfin'),
-                                       ('Pioneer', 'Pioneer'),
-                                       ('Woodchip', 'Woodchip'),
-                                       ('Gone', 'Gone'),
-                                       ('Waiting', 'Waiting'),
-                                       ),
-                              default= 'Elfin')
-
-    carer = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
-    carer_2 = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
-    backup = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
-    doctor = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
-
     allergies = models.TextField(default="None")
     conditions = models.TextField(default="No")
     diet = models.TextField(default="None")
@@ -211,7 +213,7 @@ class Member(User):
 
     @classmethod
     def members_with_status(cls, status):
-        return [o for o in cls.objects.all() if o.role in ["Member"] and o.status == status]
+        return [o for o in cls.objects.all() if o.status == status]
 
     @classmethod
     def elfins(cls):
