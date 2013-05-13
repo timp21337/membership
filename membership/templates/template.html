@@ -35,11 +35,9 @@
     <div class="span2">
         {% block sidebar %}
         {% if username %}
-            <a href="logout">Logout</a>
-            <br/><a href="home">Home</a>
-            <br/><a href="members">Elfins</a>
-            <br/><a href="carers">Carers</a>
+            <a href="home">Home</a>
             <br/><a href="admin">Admin</a>
+            <br /><a href="logout">Logout</a>
         {%  else %}
             <a href="login">Login</a>
         {% endif %}
