@@ -145,6 +145,7 @@ def _members(request, db=None, ctx={}):
         status = request.REQUEST['status']
     except StandardError:
         status = 'Elfin'
+    ctx['status'] = status
     ctx['members'] = Member.members_with_status(status)
     return HttpResponse(t.render(RequestContext(request, ctx)))
 
