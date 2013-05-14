@@ -1,4 +1,5 @@
 import os
+import sys
 from getpass import getuser
 
 # sudo pip install dj_database_url
@@ -46,6 +47,11 @@ DATABASES = {
 
 }
 if getuser() == 'jenkins':
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'database.sqlite',
+    }
+if 'test' in sys.argv:
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'database.sqlite',
