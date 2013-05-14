@@ -180,6 +180,7 @@ class Member(User):
         else:
             return ' '
 
+
     @classmethod
     def output(cls):
         out_dir = os.path.join(PROJECT_ROOT, "reports")
@@ -187,7 +188,7 @@ class Member(User):
         inc += '\\usepackage{pdfpages}\n'
         inc += '\\begin{document}\n'
         for kid in Member.objects.all():
-            if kid.role == "Member":
+            if kid.role == "Member" and kid.date_signed is None:
                 tex_filename = '%s/%s.tex' % (out_dir, kid.username)
                 pdf_filename = '%s/%s.pdf' % (out_dir, kid.username)
                 file(tex_filename, 'w').write(kid.registrationFormLatex())
