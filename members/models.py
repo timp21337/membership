@@ -240,6 +240,32 @@ class Member(User):
 
 
     @classmethod
+    def emails(cls, selection, *args):
+        method = getattr(cls, selection)
+        total = 0
+        adults = 0
+        kids = 0
+        emails = set()
+        for m in method(args):
+            total += 1
+            print m
+            if m.is_adult():
+                adults += 1
+                if m.email != '':
+                    emails.add(m.email)
+            else:
+                kids += 1
+                if m.carer is not None and m.carer.email != '' :
+                    emails.add(m.carer.email)
+                if m.carer_2 is not None and m.carer_2.email != '' :
+                    emails.add(m.carer_2.email)
+        print ", ".join(sorted([str(e).lower() for e in emails]))
+        print "%s " % [e for e in emails]
+        print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
+        connection.close()
+
+
+    @classmethod
     def carers(cls, *args):
         return [o for o in cls.objects.all() if o.role not in ["Doctor", "Backup", "Member"]]
 
