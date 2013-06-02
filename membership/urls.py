@@ -24,5 +24,6 @@ urlpatterns = patterns('',
     url(r'^carers$', 'membership.views.carers'),
     url(r'^members$', 'membership.views.members'),
     url(r'^member$', 'membership.views.member'),
+    url(r'^session$', 'membership.views.session'),
 
 )

@@ -18,6 +18,10 @@
 \usepackage{setspace}
 \usepackage{datetime}
 \usepackage{underscore}
+\usepackage{etoolbox}
+
+\newcommand\toggleTrue{\toggletrue}
+\newcommand\toggleFalse{\togglefalse}
 
 
 \yyyymmdddate
@@ -48,42 +52,59 @@
 \allsectionsfont{\sffamily}
 \linespread{1.3}
 \rhead{\projectTitle}
+
+\newtoggle{isAdult}
+\toggle%(member.is_adult)s{isAdult}
+
 \begin{table}
 \begin{tabular}{|p{1.8cm}p{5.7cm}|p{1.8cm}p{5.7cm}|}
 \hline
 
-\textbf{Child}  & %(child.first_name)s  %(child.last_name)s
-& \textbf{Status} & %(child.status)s \\
-\textbf{DoB} & %(child.dob)s   & \textbf{Gender} & %(child.gender)s \\
+\textbf{Name}  & %(member.first_name)s  %(member.last_name)s
+& \textbf{Status} & %(member.status)s \\
+
+\iftoggle{isAdult}{
+\textbf{CRB} & %(member.crb_expiry)s   & \textbf{Gender} & %(member.gender)s \\
+}{
+\textbf{DoB} & %(member.dob)s   & \textbf{Gender} & %(member.gender)s \\
+}
+
 
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
 \hline
 
-\textbf{Carer}  & %(child.carer.first_name)s %(child.carer.last_name)s
-& \textbf{Mobile} &  %(child.carer.mobile)s \\
 
+\iftoggle{isAdult}{
+\textbf{M'ship}  & %(member.membership_expiry)s
+& \textbf{Mobile} &  %(member.mobile)s \\
+\textbf{Email}        & %(member.email)s & \textbf{Landline}   & %(member.landline)s \\
+\textbf{Address}  & \multicolumn{3}{p{12cm}|}{ %(member.address)s } \\
+}{
+\textbf{Carer}  & %(member.carer.first_name)s %(member.carer.last_name)s
+& \textbf{Mobile} &  %(member.carer.mobile)s \\
+\textbf{Email}        & %(member.carer.email)s & \textbf{Landline}   & %(member.carer.landline)s \\
+\textbf{Address}  & \multicolumn{3}{p{12cm}|}{ %(member.carer.address)s } \\
+}
 
-\textbf{Email}        & %(child.carer.email)s & \textbf{Landline}   & %(child.carer.landline)s \\
-\textbf{Address}  & \multicolumn{3}{p{12cm}|}{ %(child.carer.address)s } \\
 \hline
-\textbf{Carer}  & %(child.carer_2.first_name)s %(child.carer_2.last_name)s & \textbf{Mobile} &  %(child.carer_2.mobile)s \\
+\textbf{Carer}  & %(member.carer_2.first_name)s %(member.carer_2.last_name)s & \textbf{Mobile} &  %(member.carer_2.mobile)s \\
 
 
 \hline
 
 \textbf{Backup} &
-%(child.backup.first_name)s
-%(child.backup.last_name)s
-& \textbf{Phone} & %(child.backup.mobile)s \\
+%(member.backup.first_name)s
+%(member.backup.last_name)s
+& \textbf{Phone} & %(member.backup.mobile)s \\
 
 \hline
-\textbf{Doctor}  & %(child.doctor.first_name)s %(child.doctor.last_name)s
-& \textbf{Phone} & %(child.doctor.landline)s\\
+\textbf{Doctor}  & %(member.doctor.first_name)s %(member.doctor.last_name)s
+& \textbf{Phone} & %(member.doctor.landline)s\\
 
 
 
-\textbf{Address} & \multicolumn{3}{p{12cm}|}{ %(child.doctor.address)s }\\
+\textbf{Address} & \multicolumn{3}{p{12cm}|}{ %(member.doctor.address)s }\\
 
 
 \hline
@@ -94,14 +115,14 @@
 \multicolumn{4}{|p{15cm}|}{\textbf{Allergies}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-%(child.allergies)s
+%(member.allergies)s
 \end{singlespace}
 }\\
 
 \multicolumn{4}{|p{15cm}|}{\textbf{Dietary Requirements}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-%(child.diet)s
+%(member.diet)s
 \end{singlespace}
 }\\
 
@@ -109,7 +130,7 @@
 \multicolumn{4}{|p{15cm}|}{\textbf{Any medicine regularly taken}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-%(child.medicines)s
+%(member.medicines)s
 \end{singlespace}
 }\\
 
@@ -117,7 +138,7 @@
 \multicolumn{4}{|p{15cm}|}{\textbf{Anything else we need to know}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
-%(child.conditions)s
+%(member.conditions)s
 \end{singlespace}
 }\\
 
@@ -153,7 +174,7 @@ Signed:
 \end{doublespace}
 &                 &  Date:  &
 \\
-              & %(child.carer.first_name)s %(child.carer.last_name)s &            & \today \\
+              & %(member.carer.first_name)s %(member.carer.last_name)s &            & %(member.date_signed)s \\
 \hline
 \end{tabular}
 \label{tab:methodTypes}

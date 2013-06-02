@@ -4,7 +4,7 @@ from members.models import Member
 
 class Command(BaseCommand):
     args = '<selection selection>'
-    help = 'Create pdf reports'
+    help = 'Create text report'
 
     def handle(self, *args, **options):
-        Member.output(args[0], args[1:])
+        Member.summary(args[0], args[1:])

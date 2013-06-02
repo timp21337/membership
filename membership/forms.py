@@ -1,5 +1,6 @@
 import floppyforms as forms
 import app
+from members.models import Session
 
 
 class LookupField(forms.CharField):
@@ -36,7 +37,7 @@ class PasswordWriteForm(forms.Form):
         if self.cleaned_data.get('password') != self.cleaned_data.get('password2'):
             raise forms.ValidationError('Pass phrases do not match')
         try:
-            App.checkPasswordCompliance(self.cleaned_data.get('password'))
+            app.checkPasswordCompliance(self.cleaned_data.get('password'))
         except StandardError, e:
             raise forms.ValidationError(e)
         return self.cleaned_data
@@ -67,3 +68,6 @@ class AuthenticationForm(forms.Form):
     password = forms.CharField(max_length=100, required=True, widget=forms.PasswordInput(render_value=False),
                                label='Pass phrase')
 
+
+class SessionChoiceForm(forms.Form):
+    name = forms.ModelChoiceField(queryset=Session.objects.all(), required=True, empty_label=None, label='Session')

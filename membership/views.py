@@ -7,7 +7,7 @@ from django.contrib.auth import logout as _logout
 from django.contrib.auth import login as _login
 from collections import OrderedDict
 import forms
-from members.models import Member
+from members.models import Member, Session
 
 from app import AppError
 
@@ -175,3 +175,26 @@ def member(request, db=None, ctx={}):
     A members details.
     """
     return _member(request, db, ctx)
+
+
+def _session(request, db=None, ctx={}):
+    try:
+        name = request.REQUEST['name']
+    except StandardError:
+        name = None
+        t = loader.get_template('session.html')
+        ctx['SessionChoiceForm'] = forms.SessionChoiceForm()
+        ctx['sessions'] = Session.objects.all()
+
+        return HttpResponse(t.render(RequestContext(request, ctx)))
+    t = loader.get_template('members.html')
+    ctx['members'] = Member.attendees(name)
+    return HttpResponse(t.render(RequestContext(request, ctx)))
+
+@requireSession
+def session(request, db=None, ctx={}):
+    """Session
+
+    A Session.
+    """
+    return _session(request, db, ctx)
