@@ -3,6 +3,7 @@ import sys
 from getpass import getuser
 
 # sudo pip install dj_database_url
+# https://github.com/holiture/heroku-buildpack-tex
 
 PROJECT_ROOT = os.path.dirname(__file__)
 

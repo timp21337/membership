@@ -3,8 +3,8 @@ from members.models import Member
 
 
 class Command(BaseCommand):
-    args = '<selection selection>'
-    help = 'Create pdf reports'
+    args = '<session_name session_name_id>'
+    help = 'Create pdf reports for attendees'
 
     def handle(self, *args, **options):
-        Member.output(args[0], args[1:])
+        Member.output('attendees', args[0])

@@ -6,6 +6,7 @@ from datetime import date
 from django.db import models, connection
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
 
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '../')
@@ -132,7 +133,11 @@ class Member(User):
                                    validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                                MaxValueValidator(datetime.date(2016, 12, 12))],
                                    null=True,
-                                   blank=True)
+                                   blank=True,
+                                   default=date.today())
+
+    def extras(self):
+        return [self.is_adult]
 
     class Meta:
         ordering = ['username']
@@ -151,17 +156,20 @@ class Member(User):
         else:
             return False
 
+    def age(self):
+        return int((date.today() - self.dob).days/365.25)
+
     def registrationFormLatex(self):
         template_name = os.path.join(os.path.dirname(__file__), 'tex/RegistrationForm.tex.template')
         template = file(template_name, 'r').read()
-        dotted = dottedDict(self, 'child', {})
+        dotted = dottedDict(self, 'member', {})
         done = False
         while not done:
             try:
                 page = template % dotted
                 done = True
             except KeyError, e:
-                dotted[e.message] = ''
+                dotted[e.message] = ''  # e.message is key name
         return page
 
     def membership_expired_alert(self):
@@ -182,34 +190,57 @@ class Member(User):
 
 
     @classmethod
-    def output(cls):
+    def output(cls, selection, *args):
         out_dir = os.path.join(PROJECT_ROOT, "reports")
         inc = '\\documentclass [12pt, a4paper] {article}\n'
         inc += '\\usepackage{pdfpages}\n'
         inc += '\\begin{document}\n'
-        for kid in Member.objects.all():
-            if kid.role == "Member" and kid.date_signed is None:
-                tex_filename = '%s/%s.tex' % (out_dir, kid.username)
-                pdf_filename = '%s/%s.pdf' % (out_dir, kid.username)
-                file(tex_filename, 'w').write(kid.registrationFormLatex())
-                subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
+        if len(args) == 1 and len(args[0]) == 1:
+            all_name = '%s_%s' % (selection, args[0][0])
+        else:
+            all_name = selection
+        method = getattr(cls, selection)
+        for kid in method(args):
+            tex_filename = '%s/%s.tex' % (out_dir, kid.username)
+            pdf_filename = '%s/%s.pdf' % (out_dir, kid.username)
+            file(tex_filename, 'w').write(kid.registrationFormLatex())
+            subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
 
-                inc += '\includepdf{' + pdf_filename + '}\n'
+            inc += '\includepdf{' + pdf_filename + '}\n'
         inc += '\\end{document}\n'
-        file('%s/all.tex' % out_dir, 'w').write(inc)
-        subprocess.call('pdflatex -output-directory reports %s/all.tex' % out_dir, shell=True)
-        for m in Member.carers():
-            if m.membership_expiry is not None:
+        file_name = '%s/%s.tex' % (out_dir, all_name)
+        file(file_name, 'w').write(inc)
+        subprocess.call('pdflatex -output-directory reports %s' % file_name, shell=True)
+        connection.close()
+
+
+    @classmethod
+    def summary(cls, selection, *args):
+        method = getattr(cls, selection)
+        total = 0
+        adults = 0
+        kids = 0
+        for m in method(args):
+            total += 1
+            if m.is_adult():
+                adults += 1
                 print ("%-12s %-12s %s %s %s %s" % (m.first_name,
                                                     m.last_name,
                                                     m.membership_expired_alert(),
                                                     m.membership_expiry,
                                                     m.crb_expired_alert(),
                                                     m.crb_expiry))
+            else:
+                kids += 1
+                print ("%-12s %-12s %s" % (m.first_name,
+                                                 m.last_name,
+                                                 m.age()))
+        print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
         connection.close()
 
+
     @classmethod
-    def carers(cls):
+    def carers(cls, *args):
         return [o for o in cls.objects.all() if o.role not in ["Doctor", "Backup", "Member"]]
 
     @classmethod
@@ -217,15 +248,23 @@ class Member(User):
         return [o for o in cls.objects.all() if o.status == status]
 
     @classmethod
-    def elfins(cls):
+    def members_with_role(cls, role):
+        return [o for o in cls.objects.all() if o.role == role]
+
+    @classmethod
+    def unsigned(cls, *args):
+        return [o for o in cls.members_with_role('Member') if o.date_signed is None]
+
+    @classmethod
+    def elfins(cls, *args):
         return Member.members_with_status('Elfin')
 
     @classmethod
-    def woodchips(cls):
+    def woodchips(cls, *args):
         return Member.members_with_status('Woodchip')
 
     @classmethod
-    def waiters(cls):
+    def waiters(cls, *args):
         return Member.members_with_status('Waiting')
 
     @classmethod
@@ -236,6 +275,12 @@ class Member(User):
     def girls(cls, list):
         return [i for i in list if i.gender == 'F']
 
+    @classmethod
+    def attendees(cls, session_names):
+        print session_names[0][0]
+        session = Session.objects.get(name=session_names[0][0])
+        return [a.member for a in Attendance.objects.filter(session=session)]
+
 
 def dottedDict(model, name, dict):
     for f in model._meta.fields:
@@ -245,5 +290,54 @@ def dottedDict(model, name, dict):
                 dottedDict(referred, '%s.%s' % (name, f.name), dict)
         else:
             dict['%s.%s' % (name, f.name)] = model.__dict__[f.name]
+    try:
+        extras = getattr(model, 'extras')
+        print "Has one:%s = %s" % (extras, extras())
+        for m in extras():
+            dict['%s.%s' % (name, m.__name__)] = m()
+    except StandardError:
+        pass
 
     return dict
+
+
+class Session(models.Model):
+    name = models.CharField(max_length=40, default=str(date.today()))
+    start_date = models.DateField(help_text='Format: YYYY-MM-DD',
+                                  null=True,
+                                  default=date.today())
+    end_date = models.DateField(help_text='Format: YYYY-MM-DD',
+                                null=True,
+                                default=date.today())
+
+    def __unicode__(self):
+        return self.name
+
+
+class CurrencyField(models.DecimalField):
+    __metaclass__ = models.SubfieldBase
+
+    def __init__(self, verbose_name=None, name=None, **kwargs):
+        super(CurrencyField, self). __init__(
+            verbose_name=verbose_name, name=name, max_digits=10,
+            decimal_places=2, **kwargs)
+
+    def to_python(self, value):
+        try:
+            return super(CurrencyField, self).to_python(value).quantize(Decimal("0.01"))
+        except AttributeError:
+            return None
+
+
+class Attendance(models.Model):
+    session = models.ForeignKey(Session)
+    member = models.ForeignKey(Member)
+    amount = CurrencyField(default=0)
+
+    def set_member(self, val):
+        self.member = val
+        return self
+
+    def __unicode__(self):
+        return "%s - %s" % (self.session, self.member)
+
