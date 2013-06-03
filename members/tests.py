@@ -90,8 +90,8 @@ class MemberModelTest(TestCase):
     def test_output_command(self):
         self.create_test_child()
         self.create_test_child_with_nulls()
-        Member.output()
-        self.assert_file_exists('reports/all.pdf')
+        Member.output('elfins')
+        self.assert_file_exists('reports/elfins.pdf')
 
     def test_carers(self):
         self.create_test_child()
