@@ -129,6 +129,11 @@ class Member(User):
     conditions = models.TextField(default="No")
     diet = models.TextField(default="None")
     medicines = models.TextField(default="No")
+    tetanus = models.DateField(help_text='Format: YYYY-MM-DD',
+                                   validators=[MinValueValidator(datetime.date(1960, 7, 22)),
+                                               MaxValueValidator(datetime.date(2016, 12, 12))],
+                                   null=True,
+                                   blank=True)
     date_signed = models.DateField(help_text='Format: YYYY-MM-DD',
                                    validators=[MinValueValidator(datetime.date(2011, 7, 22)),
                                                MaxValueValidator(datetime.date(2016, 12, 12))],
@@ -232,7 +237,7 @@ class Member(User):
                                                     m.crb_expiry))
             else:
                 kids += 1
-                print ("%-12s %-12s %s" % (m.first_name,
+                print ("%-12s %-15s %s" % (m.first_name,
                                                  m.last_name,
                                                  m.age()))
         print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
