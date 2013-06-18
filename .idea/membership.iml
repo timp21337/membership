@@ -16,7 +16,7 @@
       <sourceFolder url="file://$MODULE_DIR$/membership" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/members/management/commands" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 2.7.4 (/usr/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
