@@ -110,8 +110,11 @@
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
 \hline
+\textbf{Tetanus}  & %(member.tetanus)s
+& \textbf{} & \\
 
 
+\hline
 \multicolumn{4}{|p{15cm}|}{\textbf{Allergies}}\\
 \multicolumn{4}{|p{15cm}|}{
 \begin{singlespace}
