@@ -96,6 +96,7 @@ class Member(User):
                                      ('Helper', 'Helper'),
                                      ('Leader', 'Leader'),
                                      ('Officer', 'Officer'),
+                                     ('Sibling', 'Sibling'),
                                      ),
                             default= 'Member')
     status = models.CharField(max_length=10,
