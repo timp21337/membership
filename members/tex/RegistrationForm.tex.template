@@ -66,7 +66,7 @@
 \iftoggle{isAdult}{
 \textbf{CRB} & %(member.crb_expiry)s   & \textbf{Gender} & %(member.gender)s \\
 }{
-\textbf{DoB} & %(member.dob)s   & \textbf{Gender} & %(member.gender)s \\
+\textbf{DoB} & %(member.dob)s (%(member.age_years)s)  & \textbf{Gender} & %(member.gender)s \\
 }
 
 
@@ -177,7 +177,11 @@ Signed:
 \end{doublespace}
 &                 &  Date:  &
 \\
+\iftoggle{isAdult}{
+              & %(member.first_name)s %(member.last_name)s &            & %(member.date_signed)s \\
+}{
               & %(member.carer.first_name)s %(member.carer.last_name)s &            & %(member.date_signed)s \\
+}
 \hline
 \end{tabular}
 \label{tab:methodTypes}
