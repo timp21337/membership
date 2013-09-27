@@ -106,6 +106,7 @@ class Member(User):
                                        ('Gone', 'Gone'),
                                        ('Waiting', 'Waiting'),
                                        ('Carer', 'Carer'),
+                                       ('ExCarer', 'ExCarer'),
                                        ('Doctor', 'Doctor'),
                                        ),
                               null=True,
@@ -143,7 +144,7 @@ class Member(User):
                                    default=date.today())
 
     def extras(self):
-        return [self.is_adult]
+        return [self.is_adult, self.age_years]
 
     class Meta:
         ordering = ['username']
@@ -162,8 +163,11 @@ class Member(User):
         else:
             return False
 
-    def age(self):
-        return int((date.today() - self.dob).days/365.25)
+    def age_years(self):
+        return int(self.age_decimal())
+
+    def age_decimal(self):
+        return (date.today() - self.dob).days/365.25
 
     def registrationFormLatex(self):
         template_name = os.path.join(os.path.dirname(__file__), 'tex/RegistrationForm.tex.template')
@@ -238,9 +242,9 @@ class Member(User):
                                                     m.crb_expiry))
             else:
                 kids += 1
-                print ("%-12s %-15s %s" % (m.first_name,
+                print ("%-12s %-15s %2.2f" % (m.first_name,
                                                  m.last_name,
-                                                 m.age()))
+                                                 m.age_decimal()))
         print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
         connection.close()
 
