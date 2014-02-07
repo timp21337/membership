@@ -11,6 +11,8 @@ Setup
     apt-get install postgresql-server-dev-all
     apt-get install python-dev
     pip install -r /home/timp/git/membership/requirements.txt
+    ln -s ~/Dropbox/git/membership/load.py members/management/commands/
+
 
 Enables commands such as:
 
