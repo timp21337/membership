@@ -38,13 +38,9 @@
 
 \newcommand*{\defined}{\textbf}
 \newcommand{\documentVersion}{V 1.0 } 
-\newcommand{\projectShortProperName}{Woodcraft Registration Form}
-\newcommand{\projectShortName}{membership}
-\newcommand{\projectTitle}{Iffley Fields Elfins Registration Form}
-\newcommand{\documentTypeTitle}{Registration Form}
-\newcommand{\documentName}{\projectShortProperName }
+\newcommand{\projectTitle}{%(title)s}
 \newcommand{\authorName}{Tim Pizey}
-\newcommand{\authorEmail}{Tim.Pizey@gmail.com}
+\newcommand{\authorEmail}{Tim@Pizey.net}
 
 
 \begin{document}
@@ -110,9 +106,13 @@
 \hline
 \multicolumn{4}{p{15cm}}{ }\\
 \hline
-\textbf{Tetanus}  & %(member.tetanus)s
-& \textbf{} & \\
-
+\textbf{Tetanus}  & %(member.tetanus)s 
+& 
+\iftoggle{isAdult}{
+\textbf{Children} & %(member.firstChild)s  %(member.secondChild)s \\
+}{
+\textbf{} &  \\
+}
 
 \hline
 \multicolumn{4}{|p{15cm}|}{\textbf{Allergies}}\\
