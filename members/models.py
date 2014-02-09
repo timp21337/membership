@@ -112,7 +112,7 @@ class Member(User):
                               null=True,
                               blank=True)
 
-    carer = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
+    carer = models.ForeignKey('self',  related_name='children', null=True, on_delete=models.SET_NULL, blank=True)
     carer_2 = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
     backup = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
     doctor = models.ForeignKey('self', related_name='+', null=True, on_delete=models.SET_NULL, blank=True)
@@ -144,7 +144,7 @@ class Member(User):
                                    default=date.today())
 
     def extras(self):
-        return [self.is_adult, self.age_years]
+        return [self.is_adult, self.age_years, self.firstChild, self.secondChild]
 
     class Meta:
         ordering = ['username']
@@ -167,18 +167,41 @@ class Member(User):
         return int(self.age_decimal())
 
     def age_decimal(self):
-        return (date.today() - self.dob).days/365.25
+        if self.dob is not None:
+          return (date.today() - self.dob).days/365.25
+        else: 
+          return 99
 
-    def registrationFormLatex(self):
+
+    def children(self):
+        return self.carer_set.all()
+
+    def firstChild(self): 
+       if self.children.count() > 0 :
+         return self.children.all()[0]
+       else: 
+         return ''
+
+    def secondChild(self): 
+       if self.children.count() > 1 :
+         return self.children.all()[1]
+       else: 
+         return ''
+        
+
+
+    def registrationFormLatex(self, title):
+        print title
         template_name = os.path.join(os.path.dirname(__file__), 'tex/RegistrationForm.tex.template')
         template = file(template_name, 'r').read()
-        dotted = dottedDict(self, 'member', {})
+        dotted = dottedDict(self, 'member', {'title' : title})
         done = False
         while not done:
             try:
                 page = template % dotted
                 done = True
             except KeyError, e:
+                print e
                 dotted[e.message] = ''  # e.message is key name
         return page
 
@@ -200,7 +223,8 @@ class Member(User):
 
 
     @classmethod
-    def output(cls, selection, *args):
+    def output(cls, selection,  *args, **kwargs):
+        title = kwargs['title']
         out_dir = os.path.join(PROJECT_ROOT, "reports")
         inc = '\\documentclass [12pt, a4paper] {article}\n'
         inc += '\\usepackage{pdfpages}\n'
@@ -213,7 +237,8 @@ class Member(User):
         for kid in method(args):
             tex_filename = '%s/%s.tex' % (out_dir, kid.username)
             pdf_filename = '%s/%s.pdf' % (out_dir, kid.username)
-            file(tex_filename, 'w').write(kid.registrationFormLatex())
+            
+            file(tex_filename, 'w').write(kid.registrationFormLatex(title))
             subprocess.call('pdflatex -output-directory reports %s' % tex_filename, shell=True)
 
             inc += '\includepdf{' + pdf_filename + '}\n'
@@ -313,7 +338,6 @@ class Member(User):
 
     @classmethod
     def attendees(cls, session_names):
-        print session_names[0][0]
         session = Session.objects.get(name=session_names[0][0])
         return [a.member for a in Attendance.objects.filter(session=session)]
 
@@ -326,12 +350,15 @@ def dottedDict(model, name, dict):
                 dottedDict(referred, '%s.%s' % (name, f.name), dict)
         else:
             dict['%s.%s' % (name, f.name)] = model.__dict__[f.name]
+
     try:
         extras = getattr(model, 'extras')
-        print "Has one:%s = %s" % (extras, extras())
         for m in extras():
-            dict['%s.%s' % (name, m.__name__)] = m()
-    except StandardError:
+            print "Adding: %s.%s = %s" % (name, m.__name__, str(m()))
+            if m() is not None:
+              dict['%s.%s' % (name, m.__name__)] = m()
+    except AttributeError, e:
+        print e
         pass
 
     return dict
