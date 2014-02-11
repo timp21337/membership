@@ -3,4 +3,4 @@ createdb --user postgres membership
 
 ./manage.py syncdb
 ./manage.py load
-./manage.py runserver
+# ./manage.py runserver
