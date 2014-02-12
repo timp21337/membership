@@ -259,7 +259,7 @@ class Member(User):
             total += 1
             if m.is_adult():
                 adults += 1
-                print ("%-12s %-12s %s %s %s %s" % (m.first_name,
+                print ("%-12s %-17s %s %s %s %s" % (m.first_name,
                                                     m.last_name,
                                                     m.membership_expired_alert(),
                                                     m.membership_expiry,
@@ -267,9 +267,31 @@ class Member(User):
                                                     m.crb_expiry))
             else:
                 kids += 1
-                print ("%-12s %-15s %2.2f" % (m.first_name,
+                print ("%-12s %-17s %2.2f" % (m.first_name,
                                                  m.last_name,
                                                  m.age_decimal()))
+        print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
+        connection.close()
+
+
+    @classmethod
+    def diets(cls, selection, *args):
+        method = getattr(cls, selection)
+        total = 0
+        adults = 0
+        kids = 0
+        for m in method(args):
+            total += 1
+            if m.is_adult():
+                adults += 1
+                print ("%-12s %-16s %s" % (m.first_name,
+                                           m.last_name,
+                                           m.diet))
+            else:
+                kids += 1
+                print ("%-12s %-16s %s" % (m.first_name,
+                                           m.last_name,
+                                           m.diet))
         print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
         connection.close()
 
@@ -283,7 +305,7 @@ class Member(User):
         emails = set()
         for m in method(args):
             total += 1
-            print m
+            #print m
             if m.is_adult():
                 adults += 1
                 if m.email != '':
@@ -295,7 +317,7 @@ class Member(User):
                 if m.carer_2 is not None and m.carer_2.email != '' :
                     emails.add(m.carer_2.email)
         print ", ".join(sorted([str(e).lower() for e in emails]))
-        print "%s " % [e for e in emails]
+#        print "%s " % [e for e in emails]
         print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
         connection.close()
 
@@ -303,6 +325,19 @@ class Member(User):
     @classmethod
     def carers(cls, *args):
         return [o for o in cls.objects.all() if o.role not in ["Doctor", "Backup", "Member"]]
+    @classmethod
+    def dump(cls, *args):
+        print args[0]
+        return True
+
+    @classmethod
+    def current_carers(cls, *args):
+        return [o for o in cls.objects.all()
+                  if len(o.children.all()) > 0
+                     and (o.children.all()[0].status == "Elfin"
+                       or (len(o.children.all()) > 1 and o.children.all()[1].status == "Elfin")
+                     )
+               ]
 
     @classmethod
     def members_with_status(cls, status):
@@ -318,7 +353,7 @@ class Member(User):
 
     @classmethod
     def elfins(cls, *args):
-        return Member.members_with_status('Elfin')
+        return sorted(Member.members_with_status('Elfin'), key=lambda member: member.age_decimal())
 
     @classmethod
     def woodchips(cls, *args):
