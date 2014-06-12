@@ -259,16 +259,18 @@ class Member(User):
             total += 1
             if m.is_adult():
                 adults += 1
-                print ("%-12s %-17s %s %s %s %s" % (m.first_name,
+                print ("%-12s %-17s %-1s %s %s %s %s" % (m.first_name,
                                                     m.last_name,
+                                                    m.gender,
                                                     m.membership_expired_alert(),
                                                     m.membership_expiry,
                                                     m.crb_expired_alert(),
                                                     m.crb_expiry))
             else:
                 kids += 1
-                print ("%-12s %-17s %2.2f" % (m.first_name,
+                print ("%-12s %-17s %-1s %2.2f" % (m.first_name,
                                                  m.last_name,
+                                                 m.gender,
                                                  m.age_decimal()))
         print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
         connection.close()
@@ -295,6 +297,48 @@ class Member(User):
         print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
         connection.close()
 
+
+    @classmethod
+    def conditions_m(cls, selection, *args):
+        method = getattr(cls, selection)
+        total = 0
+        adults = 0
+        kids = 0
+        for m in method(args):
+            total += 1
+            if m.is_adult():
+                adults += 1
+                print ("%-12s %-16s %s" % (m.first_name,
+                                           m.last_name,
+                                           m.conditions))
+            else:
+                kids += 1
+                print ("%-12s %-16s %s" % (m.first_name,
+                                           m.last_name,
+                                           m.conditions))
+        print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
+        connection.close()
+
+    @classmethod
+    def allergies_m(cls, selection, *args):
+        method = getattr(cls, selection)
+        total = 0
+        adults = 0
+        kids = 0
+        for m in method(args):
+            total += 1
+            if m.is_adult():
+                adults += 1
+                print ("%-12s %-16s %s" % (m.first_name,
+                                           m.last_name,
+                                           m.allergies))
+            else:
+                kids += 1
+                print ("%-12s %-16s %s" % (m.first_name,
+                                           m.last_name,
+                                           m.allergies))
+        print "Total: %d Adults: %d Children: %d" %(total, adults, kids)
+        connection.close()
 
     @classmethod
     def emails(cls, selection, *args):

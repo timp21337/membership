@@ -9,10 +9,13 @@ git push heroku_test master
 # or psql date serialisation will fail.
 source ~/.rvm/scripts/rvm
 
-heroku db:push --confirm wfolktest postgres://postgres:*@127.0.0.1:5432/membership
+#heroku db:push --confirm wfolktest postgres://postgres:*@127.0.0.1:5432/membership
 
-./manage.py load
+#heroku pg:reset membership HEROKU_POSTGRESQL_MAGENTA --app wfolktest
+heroku pg:push membership HEROKU_POSTGRESQL_MAGENTA --app wfolktest
 
-git push heroku master
+#./manage.py load
 
-heroku db:push --confirm ifwfe postgres://postgres:*@127.0.0.1:5432/membership
+#git push heroku master
+
+#heroku db:push --confirm ifwfe postgres://postgres:*@127.0.0.1:5432/membership
