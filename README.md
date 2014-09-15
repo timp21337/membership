@@ -8,10 +8,10 @@ Requires https://github.com/holiture/heroku-buildpack-tex
 
 Setup
 -----
-    apt-get install postgresql-server-dev-all
-    apt-get install python-dev
-    pip install -r /home/timp/git/membership/requirements.txt
-    ln -s ~/Dropbox/git/membership/load.py members/management/commands/
+    sudo apt-get install postgresql-server-dev-9.3
+    sudo apt-get install python-dev
+    sudo pip install -r /home/timp/git/membership/requirements.txt
+    sudo ln -s ~/Dropbox/git/membership/load.py members/management/commands/
 
 
 Enables commands such as:
