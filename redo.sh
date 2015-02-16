@@ -1,5 +1,5 @@
-dropdb --user postgres membership
-createdb --user postgres membership
+#dropdb --user postgres membership
+#createdb --user postgres membership
 
 ./manage.py syncdb
 ./manage.py load
