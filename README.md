@@ -28,3 +28,10 @@ Enables commands such as:
 
 
 
+Docker
+------
+     sudo usermod -a -G docker username
+     docker build -t members .
+     docker run -v /home/timp/git/membership/rerts:/membership/reports -it -p 8000:8000 members  ./manage.py runserver
+     docker run -v /home/timp/git/membership/reports:/membership/reports members  ./manage.py output elfins
+
