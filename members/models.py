@@ -11,8 +11,6 @@ from decimal import Decimal
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '../')
 
-print PROJECT_ROOT
-
 
 def initialise():
     admin = User.objects.create_superuser('admin', 'adam@example.org', 'admin')
@@ -246,6 +244,42 @@ class Member(User):
         file_name = '%s/%s.tex' % (out_dir, all_name)
         file(file_name, 'w').write(inc)
         subprocess.call('pdflatex -output-directory reports %s' % file_name, shell=True)
+        connection.close()
+
+
+    @classmethod
+    def csv(cls, selection,  *args, **kwargs):
+        method = getattr(cls, selection)
+        print ('"FirstName" , "LastName", "Gender", "DoB", "DecimalAge", "Allegies", "Conditions", '
+               '"Diet", "Medicines", "Tetanus", "Doctor", "DoctorPhone", "DateSigned", "Carer1FirstName", "Carer1LastName", "Carer1Email", "Carer1Address","Carer1LandLine", "Carer1Mobile", "Carer2FirstName", "Carer2LastName", "Carer2Mobile", "BackupFirstName", "BackupLastName", "BackupMobile"')
+        for m in method(args):
+            print ('"%-12s", "%-17s", "%-1s", "%10s", "%2.2f", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s",  "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s",' %
+                   (m.first_name,
+                    m.last_name,
+                    m.gender,
+                    "{0.year}/{0.month}/{0.day}".format(m.dob),
+                    m.age_decimal(),
+                    m.allergies,
+                    m.conditions,
+                    m.diet,
+                    m.medicines,
+                    m.tetanus,
+                    '' if m.doctor is None else ("%s %s %s" % (m.doctor.first_name, m.doctor.last_name, m.doctor.address)),
+                    '' if m.doctor is None else m.doctor.landline,
+                    m.date_signed,
+                    m.carer.first_name,
+                    m.carer.last_name,
+                    m.carer.email,
+                    m.carer.address,
+                    m.carer.landline,
+                    m.carer.mobile,
+                    '' if m.carer_2 is None else m.carer_2.first_name,
+                    '' if m.carer_2 is None else m.carer_2.last_name,
+                    '' if m.carer_2 is None else m.carer_2.mobile,
+                    '' if m.backup is None else m.backup.first_name,
+                    '' if m.backup is None else m.backup.last_name,
+                    '' if m.backup is None else m.backup.mobile,
+                   ))
         connection.close()
 
 
