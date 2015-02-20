@@ -250,13 +250,13 @@ class Member(User):
     @classmethod
     def csv(cls, selection,  *args, **kwargs):
         method = getattr(cls, selection)
-        print ("'FirstName' , 'LastName', 'Gender', 'DoB', 'DecimalAge', 'Allegies', 'Conditions', "
-               "'Diet', 'Medicines', 'Tetanus', 'Doctor', 'DoctorPhone', 'DateSigned', "
-               "'Carer1FirstName', 'Carer1LastName', 'Carer1Email', 'Carer1Address',"
-               "'Carer1LandLine', 'Carer1Mobile', 'Carer2FirstName', 'Carer2LastName',"
-               "'Carer2Mobile', 'BackupFirstName', 'BackupLastName', 'BackupMobile'")
+        print ("'FirstName','LastName','Gender','DoB','DecimalAge','Allegies','Conditions',"
+               "'Diet','Medicines','Tetanus','Doctor','DoctorPhone','DateSigned',"
+               "'Carer1FirstName','Carer1LastName','Carer1Email','Carer1Address',"
+               "'Carer1LandLine','Carer1Mobile','Carer2FirstName','Carer2LastName',"
+               "'Carer2Mobile','BackupFirstName','BackupLastName','BackupMobile'")
         for m in method(args):
-            print ("'%-12s', '%-17s', '%-1s', '%10s', '%2.2f', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'," %
+            print ("'%-12s','%-17s','%-1s','%10s','%2.2f','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'," %
                    (m.first_name,
                     m.last_name,
                     m.gender,

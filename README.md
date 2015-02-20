@@ -32,7 +32,9 @@ Docker
 ------
      sudo usermod -a -G docker username
      docker build -t members .
-     docker run -v /home/timp/git/membership/rerts:/membership/reports -it -p 8000:8000 members  ./manage.py runserver
      docker run -v ${PWD}/reports:/membership/reports -it -p 8000:8000 members  ./manage.py runserver 0.0.0.0:8000
- 
+     docker run -v ${PWD}/reports:/membership/reports members  ./manage.py csv elfins > elfins.csv
+     docker run -v ${PWD}/reports:/membership/reports members  ./manage.py output elfins
+
+
 
